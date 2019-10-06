@@ -24,12 +24,15 @@ public class TileManager : MonoBehaviour
 
         foreach (Button b in allButtonTiles)
         {
-            b.onClick.AddListener(() => SetTileSelected(b.GetComponent<Image>().sprite));
+            b.onClick.AddListener(() => SetTileSelected(b, b.GetComponent<Image>().sprite));
         }
         //componentTiles.Add(fireExtTile);
     }
 
-    private void SetTileSelected(Sprite s){
+    private void SetTileSelected(Button b, Sprite s){
+        foreach (var button in allButtonTiles)
+            button.interactable = true;
+        b.interactable = false;
         EditorManager.em.TileSpriteSelected = s;
     }
     private void Update() {

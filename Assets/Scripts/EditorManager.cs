@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class EditorManager : MonoBehaviour
 {
+    public Button genGrid;
     public static EditorManager em;
     [HideInInspector]
     public Sprite TileSpriteSelected;
 
-    public Sprite wallSprite, emptySprite, exitSprite, fireExSprite, fireSprite;
+    private Sprite wallSprite, emptySprite, exitSprite, fireExSprite, fireSprite;
 
 
     private void Awake() {
@@ -49,6 +50,7 @@ public class EditorManager : MonoBehaviour
             }
         }
     }
+
 
     private void LoadSprites(){
             wallSprite = Resources.Load<Sprite>("Assets/Resources/Sprites/Building Structures/Wall.png");

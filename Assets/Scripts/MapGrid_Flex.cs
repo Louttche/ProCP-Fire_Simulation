@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class MapGrid_Flex : MonoBehaviour {
 
-    [SerializeField]
     private int rows;
-    [SerializeField]
     private int cols;
     public Vector2 gridSize;
     [SerializeField]
@@ -29,7 +27,7 @@ public class MapGrid_Flex : MonoBehaviour {
     void Start()
     {
         OriginalSpriteSize = tileSprite.bounds.size;
-        InitGrid(); //Instantiate tiles
+        //InitGrid(); //Instantiate tiles
     }
 
     public Tile FindTileById(int id)
@@ -44,8 +42,14 @@ public class MapGrid_Flex : MonoBehaviour {
         return null;
     }
 
-    void InitGrid()
+    public void InitGrid()
     {
+        //Resize the gridsize if x and y is not equal
+        if (rows > cols)
+            gridSize.x = gridSize.x / ((float)rows/(float)cols);
+        else if (cols > rows)
+            gridSize.y = gridSize.y / ((float)cols/(float)rows);
+
         tilePrefab.GetComponent<SpriteRenderer>().sprite = tileSprite;
         tileSize = OriginalSpriteSize;
         
@@ -99,6 +103,10 @@ public class MapGrid_Flex : MonoBehaviour {
         {
             Debug.LogFormat("ID: {0}, Position: {1}, Sprite: {2}", t.tileID, t.tilePosition, t.tileSprite);
         }*/
+    }
+
+    public void SetBullshit(int r, int c){
+        
     }
 
     //so you can see the width and height of the grid on editor
