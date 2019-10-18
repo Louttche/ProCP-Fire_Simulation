@@ -26,7 +26,6 @@ public class TileManager : MonoBehaviour
         {
             b.onClick.AddListener(() => SetTileSelected(b, b.GetComponent<Image>().sprite));
         }
-        //componentTiles.Add(fireExtTile);
     }
 
     private void SetTileSelected(Button b, Sprite s){
@@ -35,10 +34,7 @@ public class TileManager : MonoBehaviour
         b.interactable = false;
         EditorManager.em.TileSpriteSelected = s;
     }
-    private void Update() {
-    }
 
-    
     //To be called through the Unity Editor when button is pressed
     /*public void SetTileSelected(Button item){
         if (item.image.sprite.name)

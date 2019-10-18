@@ -1,29 +1,32 @@
 ﻿using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EditorManager : MonoBehaviour
 {
-    public Button genGrid;
+    //public Sprite[] allSprites;
+    public string DataFileName = "data.json";
     public static EditorManager em;
     [HideInInspector]
     public Sprite TileSpriteSelected;
 
-    private Sprite wallSprite, emptySprite, exitSprite, fireExSprite, fireSprite;
+    [HideInInspector]
+    public Sprite wallSprite, emptySprite, exitSprite, fireExSprite, fireSprite;
+    public bool spritesLoaded = false;
 
 
     private void Awake() {
         em = this;
-    }
-    
-    private void Start() {
         LoadSprites();
+        SaveSystem.Init();
     }
 
     private void Update() {
         if (Input.GetMouseButtonDown(0)){
             SetTileType();
+            //Debug.LogFormat("Tile selected: {0}", TileSpriteSelected);
         }
     }
 
@@ -51,13 +54,53 @@ public class EditorManager : MonoBehaviour
         }
     }
 
+    public void Save(){
+        try
+        {
+            //Object to be saved through json (saves current tile grid automatically)
+            SaveObject so = new SaveObject();
+            string json = JsonUtility.ToJson(so);
+            Debug.Log(json);
+            SaveSystem.Save(json);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Could not save!");
+            throw;
+        }        
+    }
+
+    public void Load(){
+        string saveString = SaveSystem.Load();
+        if (saveString != null){
+            // Read the json from the file into a string
+            SaveObject so = JsonUtility.FromJson<SaveObject>(saveString);
+            
+            //Instantiate the tiles
+            /*foreach (var so in sos)
+            {
+                Debug.LogFormat("tile {0}, pos {1}, sprite {2}", t.tileID, t.tilePosition, t.tileSprite);
+            }*/
+        }
+    }
 
     private void LoadSprites(){
-            wallSprite = Resources.Load<Sprite>("Assets/Resources/Sprites/Building Structures/Wall.png");
-            emptySprite = Resources.Load<Sprite>("Assets/Resources/Sprites/Building Structures/Clear_Tile.png");
-            exitSprite = Resources.Load<Sprite>("Assets/Resources/Sprites/Building Structures/Exit.png");
-            fireExSprite = Resources.Load<Sprite>("Assets/Resources/Sprites/Building Equipment/Fire_Extinguisher.png");
-            fireSprite = Resources.Load<Sprite>("Assets/Resources/Sprites/Other/Fire.png");
+            wallSprite = Resources.Load<Sprite>("Sprites/Building Structures/Wall");
+            emptySprite = Resources.Load<Sprite>("Sprites/Building Structures/Clear_Tile");
+            exitSprite = Resources.Load<Sprite>("Sprites/Building Structures/Exit");
+            fireExSprite = Resources.Load<Sprite>("Sprites/Building Equipment/Fire_Extinguisher");
+            fireSprite = Resources.Load<Sprite>("Sprites/Other/Fire");
             TileSpriteSelected = emptySprite;
+            spritesLoaded = true;
     }
+
+    /*public Sprite GetSpriteByName(string name)
+    {
+        for (int i = 0; i < allSprites.Length; i++)
+        {
+            if (allSprites[i].name == name)
+                return allSprites[i];
+        }
+        return null;
+    }*/
 }
