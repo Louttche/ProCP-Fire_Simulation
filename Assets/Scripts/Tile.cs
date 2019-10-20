@@ -10,9 +10,12 @@ public class Tile : MonoBehaviour
     public tileType currentTileType;
 
     private void Update() {
-        this.gameObject.GetComponent<SpriteRenderer>().sprite = this.tileSprite;   
+        EditMode();
     }
 
+    public void EditMode(){
+        this.gameObject.GetComponent<SpriteRenderer>().sprite = this.tileSprite;
+    }
     public void SetTileTypeFromSprite(){
         switch (tileSprite.name)
         {

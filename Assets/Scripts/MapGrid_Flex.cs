@@ -14,7 +14,7 @@ public class MapGrid_Flex : MonoBehaviour {
     public GameObject tilePrefab;
     private Vector2 tileSize;
     private Vector2 tileScale;
-    private int tileID = 0;
+    private int tileID = 1;
 
     [HideInInspector]
     public Vector2 OriginalSpriteSize;
@@ -48,6 +48,14 @@ public class MapGrid_Flex : MonoBehaviour {
     {
         //TO-DO Pop up window to request for grid size (if newMap)
 
+        //Destroy previous tile objects to make a new one
+        if(transform.childCount > 0){
+            foreach (Transform child in transform) {
+                GameObject.Destroy(child.gameObject);
+            }
+            tileID = 1;
+        }
+        
         //Resize the gridsize if x and y is not equal
         if (_rows > _cols)
             gridSize.x = gridSize.x / ((float)_rows/(float)_cols);

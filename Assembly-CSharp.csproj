@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\EditorManager.cs" />
      <Compile Include="Assets\Scripts\MapGrid.cs" />
      <Compile Include="Assets\Scripts\MapGrid_Flex.cs" />
+     <Compile Include="Assets\Scripts\OpenFile.cs" />
      <Compile Include="Assets\Scripts\SavedTile.cs" />
      <Compile Include="Assets\Scripts\SaveObject.cs" />
      <Compile Include="Assets\Scripts\SaveSystem.cs" />

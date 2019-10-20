@@ -23,6 +23,10 @@ public class EditorManager : MonoBehaviour
         SaveSystem.Init();
     }
 
+    private void Start() {
+        //Debug.LogFormat("Saves folder path: {0}", SaveSystem.SAVE_FOLDER);
+    }
+
     private void Update() {
         if (Input.GetMouseButtonDown(0)){
             SetTileType();
@@ -71,16 +75,26 @@ public class EditorManager : MonoBehaviour
     }
 
     public void Load(){
-        string saveString = SaveSystem.Load();
-        if (saveString != null){
-            // Read the json from the file into a string
-            SaveObject so = JsonUtility.FromJson<SaveObject>(saveString);
-            
-            //Instantiate the tiles
-            /*foreach (var so in sos)
-            {
-                Debug.LogFormat("tile {0}, pos {1}, sprite {2}", t.tileID, t.tilePosition, t.tileSprite);
-            }*/
+        try
+        {
+            string saveString = SaveSystem.Load();
+            if (saveString != null){
+                // Read the json from the file into a string
+                SaveObject so = JsonUtility.FromJson<SaveObject>(saveString);
+
+                Debug.LogFormat("Loaded maps tile count: {0}", so.savedTiles.Count);
+                //Instantiate the tiles
+                /*foreach (var so in sos)
+                {
+                    Debug.LogFormat("tile {0}, pos {1}, sprite {2}", t.tileID, t.tilePosition, t.tileSprite);
+                }*/
+            } else
+                Debug.Log("Could not load!");
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Could not load!");
+            throw;
         }
     }
 
