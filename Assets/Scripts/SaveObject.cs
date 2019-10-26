@@ -15,7 +15,7 @@ public class SaveObject
             SavedTile st = new SavedTile();
             st.tileID = t.tileID;
             st.tilePosition = t.tilePosition;
-            st.currentTileType = t.currentTileType;
+            st.currentTileType = t.tileType;
             this.savedTiles.Add(st);
         }
     }

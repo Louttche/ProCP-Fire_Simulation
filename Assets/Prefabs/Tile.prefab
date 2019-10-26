@@ -61,7 +61,7 @@ MonoBehaviour:
   tileID: 101
   tilePosition: {x: 8.249687, y: 36.07705}
   tileSprite: {fileID: 21300000, guid: 08a98ebb59c4b3f43965c60635aad2fd, type: 3}
-  currentTileType: 0
+  tileType: 0
 --- !u!212 &5778533340789376288
 SpriteRenderer:
   m_ObjectHideFlags: 0

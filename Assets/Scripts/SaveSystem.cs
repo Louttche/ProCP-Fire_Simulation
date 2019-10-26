@@ -14,7 +14,7 @@ public static class SaveSystem
         }
     }
     public static void Save(string saveString){
-        File.WriteAllText(SAVE_FOLDER + EditorManager.em.DataFileName, saveString);
+        File.WriteAllText(OpenFile.SaveFilePath(), saveString);
     }
 
     public static string Load(){

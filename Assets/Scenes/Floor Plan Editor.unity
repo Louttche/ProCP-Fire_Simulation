@@ -2352,8 +2352,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rows: 10
-  _cols: 10
+  _cols: 5
   gridSize: {x: 80, y: 80}
+  OriginalGridSize: {x: 0, y: 0}
   gridOffset: {x: 0, y: 0}
   tilePrefab: {fileID: 3720520058002653003, guid: 274fd83a3929fe64a8fc0e49c631f68e,
     type: 3}
@@ -2722,8 +2723,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1075994333}
-        m_MethodName: InitGrid
-        m_Mode: 6
+        m_MethodName: NewMap
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

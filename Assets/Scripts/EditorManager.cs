@@ -58,7 +58,7 @@ public class EditorManager : MonoBehaviour
         }
     }
 
-    public void Save(){
+    private void Save(){
         try
         {
             //Object to be saved through json (saves current tile grid automatically)
@@ -74,16 +74,16 @@ public class EditorManager : MonoBehaviour
         }        
     }
 
-    public void Load(){
+    private void Load(){
         try
         {
             string saveString = SaveSystem.Load();
             if (saveString != null){
                 // Read the json from the file into a string
                 SaveObject so = JsonUtility.FromJson<SaveObject>(saveString);
-
-                Debug.LogFormat("Loaded maps tile count: {0}", so.savedTiles.Count);
                 //Instantiate the tiles
+                if (so != null)
+                    MapGrid_Flex.mg.LoadMap(so);
                 /*foreach (var so in sos)
                 {
                     Debug.LogFormat("tile {0}, pos {1}, sprite {2}", t.tileID, t.tilePosition, t.tileSprite);
