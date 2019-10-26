@@ -18,17 +18,11 @@ public static class SaveSystem
     }
 
     public static string Load(){
-        if(File.Exists(SAVE_FOLDER + EditorManager.em.DataFileName))
-        {
-            // Read the json from the file into a string
-            //string saveString = File.ReadAllText(SAVE_FOLDER + EditorManager.em.DataFileName);
-            string saveString = File.ReadAllText(OpenFile.SelectFilePath());
-            if (saveString.Length != 0)
-                return saveString;
-        } else
-        {
-            Debug.Log("There are no saved files.");
-        }
+        // Read the json from the file into a string
+        //string saveString = File.ReadAllText(SAVE_FOLDER + EditorManager.em.DataFileName);
+        string saveString = File.ReadAllText(OpenFile.SelectFilePath());
+        if (saveString.Length != 0)
+            return saveString;
         return null;
     }
 }
