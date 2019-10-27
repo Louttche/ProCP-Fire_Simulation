@@ -58,8 +58,13 @@
      <Compile Include="Assets\Scripts\EditorManager.cs" />
      <Compile Include="Assets\Scripts\MapGrid.cs" />
      <Compile Include="Assets\Scripts\MapGrid_Flex.cs" />
+     <Compile Include="Assets\Scripts\OpenFile.cs" />
+     <Compile Include="Assets\Scripts\SavedTile.cs" />
+     <Compile Include="Assets\Scripts\SaveObject.cs" />
+     <Compile Include="Assets\Scripts\SaveSystem.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
      <Compile Include="Assets\Scripts\TileManager.cs" />
+     <Compile Include="Assets\Scripts\TileType.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />

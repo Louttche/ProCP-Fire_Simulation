@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TileManager : MonoBehaviour
 {
     public static TileManager tm;
-    public Button wallTile, emptyTile, exitTile;
+    public Button btn_wallTile, btn_emptyTile, btn_exitTile;
     public Button fireExtTile;
 
     private Tile tileSelected;
@@ -17,16 +17,15 @@ public class TileManager : MonoBehaviour
         tm = this;
     }
     private void Start() {
-        allButtonTiles.Add(wallTile);
-        allButtonTiles.Add(emptyTile);
-        allButtonTiles.Add(exitTile);
+        allButtonTiles.Add(btn_wallTile);
+        allButtonTiles.Add(btn_emptyTile);
+        allButtonTiles.Add(btn_exitTile);
         allButtonTiles.Add(fireExtTile);
 
         foreach (Button b in allButtonTiles)
         {
             b.onClick.AddListener(() => SetTileSelected(b, b.GetComponent<Image>().sprite));
         }
-        //componentTiles.Add(fireExtTile);
     }
 
     private void SetTileSelected(Button b, Sprite s){
@@ -35,10 +34,7 @@ public class TileManager : MonoBehaviour
         b.interactable = false;
         EditorManager.em.TileSpriteSelected = s;
     }
-    private void Update() {
-    }
 
-    
     //To be called through the Unity Editor when button is pressed
     /*public void SetTileSelected(Button item){
         if (item.image.sprite.name)
