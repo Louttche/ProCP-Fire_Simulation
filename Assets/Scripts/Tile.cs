@@ -8,6 +8,8 @@ public class Tile : MonoBehaviour
     public Vector2 tilePosition;
     public Sprite tileSprite;
     public tileType tileType;
+    public bool hasFireExt = false;
+    public bool isOuterWall = false;
 
     private void Update() {
         EditMode();
@@ -15,7 +17,12 @@ public class Tile : MonoBehaviour
 
     public void EditMode(){
         this.gameObject.GetComponent<SpriteRenderer>().sprite = this.tileSprite;
-        SetTileTypeFromCurrentSprite();
+        if (!hasFireExt){
+            SetTileTypeFromCurrentSprite();
+        }
+        else{
+            this.tileSprite = EditorManager.em.fireExSprite;
+        }
     }
     public void SetTileTypeFromCurrentSprite(){
         switch (tileSprite.name)
@@ -33,7 +40,10 @@ public class Tile : MonoBehaviour
                 this.tileType = tileType.Fire;
                 break;
             case "Wall":
-                this.tileType = tileType.Wall;
+                if (isOuterWall)
+                    this.tileType = tileType.OuterWall;
+                else
+                    this.tileType = tileType.Wall;
                 break;
             default:
                 break;

@@ -5,8 +5,8 @@ using UnityEngine;
 public class MapGrid_Flex : MonoBehaviour {
 
     public static MapGrid_Flex mg;
-    public int _rows = 10;
-    public int _cols = 10;
+    public int _rows;
+    public int _cols;
     public Vector2 gridSize;
 
     public Vector2 OriginalGridSize;
@@ -27,8 +27,9 @@ public class MapGrid_Flex : MonoBehaviour {
     public List<Tile> currentTiles = new List<Tile>();
 
     private void Awake() {
-        mg = this;    
+        mg = this;
     }
+
     void Start()
     {
         OriginalGridSize = gridSize;
@@ -36,10 +37,10 @@ public class MapGrid_Flex : MonoBehaviour {
         //InitGrid(); //Instantiate tiles
     }
 
-    public void NewMap()
-    {
-        //TO-DO Pop up window to request for grid size (if newMap)
-        
+    public void NewMap(int row, int col)
+    { 
+        this._rows = row;
+        this._cols = col;
         //Destroy previous tile objects to make a new one
         DestroyCurrentMap();
 
@@ -49,23 +50,25 @@ public class MapGrid_Flex : MonoBehaviour {
         ResizeGrid();
         
         Sprite newSprite = EditorManager.em.emptySprite;
-        
+        bool outerWall;
         //Set the proper size of the tiles and the grid
         SetTilesize_Gridsize();
 
         //fill the grid with tiles by using Instantiate
-        for (int row = 0; row < _rows; row++)
+        for (int r = 0; r < _rows; r++)
         {
-            for (int col = 0; col < _cols; col++)
+            for (int c = 0; c < _cols; c++)
             {
-                if ((row == 0) || (row == _rows - 1) || (col == _cols - 1) || (col == 0)){
+                if ((r == 0) || (r == _rows - 1) || (c == _cols - 1) || (c == 0)){
                     newSprite = EditorManager.em.wallSprite; //Standard walls around the building
+                    outerWall = true;
                 } else {
                     newSprite = EditorManager.em.emptySprite;
+                    outerWall = false;
                 }
 
                 //add the platform size so that no two tiles will have the same x and y position
-                Vector2 pos = new Vector2(col * tileSize.x + gridOffset.x + transform.position.x, row * tileSize.y + gridOffset.y + transform.position.y);
+                Vector2 pos = new Vector2(c * tileSize.x + gridOffset.x + transform.position.x, r * tileSize.y + gridOffset.y + transform.position.y);
 
                 //instantiate the game object, at position pos, with rotation set to identity
                 GameObject cO = Instantiate(tilePrefab, pos, Quaternion.identity) as GameObject;
@@ -82,6 +85,7 @@ public class MapGrid_Flex : MonoBehaviour {
                 tileScript.tileID = tileID++;
                 tileScript.tilePosition = pos;
                 tileScript.tileSprite = newSprite;
+                tileScript.isOuterWall = outerWall;
                 //Add the tile in the list
                 currentTiles.Add(tileScript);
             }
