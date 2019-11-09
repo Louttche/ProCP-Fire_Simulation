@@ -28,10 +28,9 @@ public class Settings : MonoBehaviour
         //Add/Remove fire extinguishers from the map, while keeping the original sprite of the tile through its type (type remains unchanged)
         if (currentTileObj != null){
             if (currentTileObj.tag == "tile"){
-                if (!currentTileObj.GetComponent<Tile>().hasFireExt){
+                if ((!currentTileObj.GetComponent<Tile>().hasFireExt) && ((currentTileObj.GetComponent<Tile>().tileType == tileType.Wall) || (currentTileObj.GetComponent<Tile>().tileType == tileType.OuterWall))){
                     currentTileObj.GetComponent<Tile>().hasFireExt = true;
-                } else
-                {
+                } else {
                     currentTileObj.GetComponent<Tile>().SetSpriteFromTileType(currentTileObj.GetComponent<Tile>().tileType);
                     currentTileObj.GetComponent<Tile>().hasFireExt = false;
                 }

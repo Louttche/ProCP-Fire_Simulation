@@ -30,7 +30,7 @@ public class EditorManager : MonoBehaviour
     }
 
     private void Update() {
-        if (Input.GetMouseButtonDown(0)){
+        if (Input.GetMouseButton(0)){
             SetTileType();
             //Debug.LogFormat("Tile selected: {0}", TileSpriteSelected);
         }
