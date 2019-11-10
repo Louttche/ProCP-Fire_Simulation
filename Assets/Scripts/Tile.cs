@@ -39,6 +39,9 @@ public class Tile : MonoBehaviour
             case "Fire":
                 this.tileType = tileType.Fire;
                 break;
+            case "People":
+                this.tileType = tileType.People;
+                break;
             case "Wall":
                 if (isOuterWall)
                     this.tileType = tileType.OuterWall;
@@ -68,6 +71,9 @@ public class Tile : MonoBehaviour
                     break;
                 case tileType.Wall:
                     this.tileSprite = EditorManager.em.wallSprite;
+                    break;
+                case tileType.People:
+                    this.tileSprite = EditorManager.em.peopleSprite;
                     break;
                 default:
                     break;

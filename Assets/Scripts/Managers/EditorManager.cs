@@ -13,7 +13,7 @@ public class EditorManager : MonoBehaviour
     public Sprite TileSpriteSelected;
 
     [HideInInspector]
-    public Sprite wallSprite, emptySprite, exitSprite, fireExSprite, fireSprite;
+    public Sprite wallSprite, emptySprite, exitSprite, fireExSprite, fireSprite, peopleSprite;
     
     [HideInInspector]
     public bool spritesLoaded = false;
@@ -128,6 +128,7 @@ public class EditorManager : MonoBehaviour
             exitSprite = Resources.Load<Sprite>("Sprites/Building Structures/Exit");
             fireExSprite = Resources.Load<Sprite>("Sprites/Building Equipment/Fire_Extinguisher");
             fireSprite = Resources.Load<Sprite>("Sprites/Other/Fire");
+            peopleSprite = Resources.Load<Sprite>("Sprites/Other/People");
             TileSpriteSelected = emptySprite;
             spritesLoaded = true;
     }

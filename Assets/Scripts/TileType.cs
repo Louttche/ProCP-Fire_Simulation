@@ -6,5 +6,6 @@ public enum tileType
         Fire,
         FireEx,
         Empty,
+        People,
         Exit
     }

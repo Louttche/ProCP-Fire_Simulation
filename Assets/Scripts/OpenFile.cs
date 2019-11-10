@@ -16,7 +16,6 @@ public static class OpenFile //: MonoBehaviour //EditorWindow
         };
         //string path = EditorUtility.OpenFilePanel("Select a map file", SaveSystem.SAVE_FOLDER, "json");
         string path = GetPath(sfbw.OpenFilePanel("Open file", SaveSystem.SAVE_FOLDER, extensions, false));
-        Debug.Log(path);
         if (path.Length != 0)
         {
             return path;

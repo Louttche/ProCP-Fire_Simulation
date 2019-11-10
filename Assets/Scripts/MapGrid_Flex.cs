@@ -95,6 +95,7 @@ public class MapGrid_Flex : MonoBehaviour {
     public void LoadMap(SaveObject loadedMap){
         this._rows = loadedMap.rows;
         this._cols = loadedMap.cols;
+        Settings.st.ClearEmptyTiles();
         currentTiles.Clear();
 
         //Destroy previous tile objects to make a new one
