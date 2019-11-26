@@ -21,7 +21,6 @@ public class TileManager : MonoBehaviour
         if(buttonTilesParent.transform.childCount > 0){
             foreach (Transform b in buttonTilesParent.transform) {
                 allButtonTiles.Add(b.gameObject);
-                Debug.Log($"button {b.name} added.");
             }
         }
 

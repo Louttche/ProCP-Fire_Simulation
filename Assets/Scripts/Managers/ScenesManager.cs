@@ -8,6 +8,8 @@ public class ScenesManager : MonoBehaviour
     //private AssetBundle myLoadedAssetBundle;
     //private string[] scenePaths;
 
+    private bool edit;
+
     private void Awake() {
         DontDestroyOnLoad(this);
         SaveSystem.Init();
@@ -29,8 +31,10 @@ public class ScenesManager : MonoBehaviour
     private void Update() {
         Scene s = SceneManager.GetActiveScene();
         if (s.name == "Floor Plan Editor"){
-            MapGrid_Flex.mg.NewMap(int.Parse(UIManager.uim.rows.text), int.Parse(UIManager.uim.cols.text));
-            Destroy(this.gameObject);
+            if (edit == false){
+                MapGrid_Flex.mg.NewMap(int.Parse(UIManager.uim.rows.text), int.Parse(UIManager.uim.cols.text));
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -40,7 +44,9 @@ public class ScenesManager : MonoBehaviour
     public void GoToCreateMap(){
         try
         {
-            if ((UIManager.uim.rows.text != null) && (UIManager.uim.cols.text != null)){            
+            if ((UIManager.uim.rows.text != null) && (UIManager.uim.cols.text != null)){   
+                Cost.c.budget = float.Parse(UIManager.uim.budget.text);
+                edit = false;       
                 SceneManager.LoadScene("Floor Plan Editor", LoadSceneMode.Single);
             }
         }
@@ -49,6 +55,11 @@ public class ScenesManager : MonoBehaviour
             Debug.Log("Could not create a new map. Check your dimensions and try again.");
             throw;
         }
+    }
+
+    public void GoToEditLoadMap(){
+        edit = true;
+        SceneManager.LoadScene("Floor Plan Editor", LoadSceneMode.Single);
     }
 
     public void GoToLoadMap(){

@@ -8,4 +8,5 @@ public class SavedTile
     public int tileID;
     public Vector2 tilePosition;
     public tileType currentTileType;
+    public bool isOuterWall;
 }

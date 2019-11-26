@@ -2,6 +2,8 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - ChangeScenes
+    - Cost
+    - Edit_UIManager
     - EditorManager
     - MapGrid_Flex
     - ResultManager
@@ -19,6 +21,8 @@ ScriptsOnlyBuild:
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
+    UnityEditor.TestRunner.dll:
+    - UnityEditor.TestTools.TestRunner.TestListCacheData
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
@@ -132,6 +136,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 10166}
     - Class: 114
       Script: {instanceID: 10332}
+    - Class: 114
+      Script: {instanceID: 40348}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -201,6 +207,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 10592}
     - Class: 114
       Script: {instanceID: 10670}
+    - Class: 114
+      Script: {instanceID: 15146}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -545,18 +553,6 @@ ScriptsOnlyBuild:
     className: TMP_InputField
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: UnityEngine.Advertisements.dll
-    namespaceName: UnityEngine.Advertisements
-    className: CallbackExecutor
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: UnityEngine.Advertisements.dll
-    namespaceName: UnityEngine.Advertisements.Editor
-    className: Placeholder
-  - hash:
-      serializedVersion: 2
       Hash: cf9f5cf2c3145a37ac07f00e50e460f9
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -749,7 +745,7 @@ ScriptsOnlyBuild:
     className: VerticalLayoutGroup
   - hash:
       serializedVersion: 2
-      Hash: 54545ff15a331ab34fdcfd9dc217bd76
+      Hash: 37fb28d09c6f7bd97e9e75a915e98e07
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Tile
@@ -1145,7 +1141,7 @@ ScriptsOnlyBuild:
     className: MarkerTrack
   - hash:
       serializedVersion: 2
-      Hash: 3efdd8d468d0b9033118ec05c2985cfd
+      Hash: c9d9714dacc3e7a7c6610e9f20cfe99a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: UIManager
@@ -1221,10 +1217,23 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: e5cd2d43576f3889485b021df388c384
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Cost
+  - hash:
+      serializedVersion: 2
+      Hash: b22a6bf3d390e00eb94b072059f1e28f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Edit_UIManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/Main.unity
   - Assets/Scenes/Floor Plan Editor.unity
   - Assets/Scenes/Simulation.unity
   - Assets/Scenes/Compare.unity
-  playerPath: C:/Users/31627/Documents/Github/Floor Plan Editor/Demo/Fire Escape Simulation.exe
+  playerPath: C:/Users/31627/Documents/Github/Floor Plan Editor/Demo 2.0/Fire Escape
+    Simulation.exe

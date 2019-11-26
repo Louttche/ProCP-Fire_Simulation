@@ -8,6 +8,8 @@ public class Tile : MonoBehaviour
     public Vector2 tilePosition;
     public Sprite tileSprite;
     public tileType tileType;
+    public float cost;
+
     public bool hasFireExt = false;
     public bool isOuterWall = false;
 
@@ -24,29 +26,41 @@ public class Tile : MonoBehaviour
             this.tileSprite = EditorManager.em.fireExSprite;
         }
     }
+    
+
+    public void SetCost(float cost){
+        this.cost = cost;
+    }
+
     public void SetTileTypeFromCurrentSprite(){
         switch (tileSprite.name)
         {
             case "Clear_Tile":
                 this.tileType = tileType.Empty;
+                SetCost(20);
                 break;
             case "Exit":
                 this.tileType = tileType.Exit;
+                SetCost(300);
                 break;
             case "Fire_Extinguisher":
                 this.tileType = tileType.FireEx;
+                SetCost(100);
                 break;
             case "Fire":
                 this.tileType = tileType.Fire;
+                SetCost(0);
                 break;
             case "People":
                 this.tileType = tileType.People;
+                SetCost(0);
                 break;
             case "Wall":
                 if (isOuterWall)
                     this.tileType = tileType.OuterWall;
                 else
                     this.tileType = tileType.Wall;
+                SetCost(200);
                 break;
             default:
                 break;
@@ -70,6 +84,9 @@ public class Tile : MonoBehaviour
                     this.tileSprite = EditorManager.em.fireSprite;
                     break;
                 case tileType.Wall:
+                    this.tileSprite = EditorManager.em.wallSprite;
+                    break;
+                case tileType.OuterWall:
                     this.tileSprite = EditorManager.em.wallSprite;
                     break;
                 case tileType.People:

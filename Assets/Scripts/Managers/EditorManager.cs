@@ -9,6 +9,7 @@ public class EditorManager : MonoBehaviour
     //public Sprite[] allSprites;
 
     public static EditorManager em;
+    
     [HideInInspector]
     public Sprite TileSpriteSelected;
 
@@ -110,8 +111,9 @@ public class EditorManager : MonoBehaviour
                 // Read the json from the file into a string
                 SaveObject so = JsonUtility.FromJson<SaveObject>(saveString);
                 //Instantiate the tiles
-                if (so != null)
+                if (so != null){
                     MapGrid_Flex.mg.LoadMap(so);
+                }
             } else
                 Debug.Log("Could not load!");
         }

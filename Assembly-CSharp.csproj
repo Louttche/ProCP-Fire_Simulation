@@ -57,6 +57,8 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\ChangeScenes.cs" />
      <Compile Include="Assets\Scripts\Configure Map.cs" />
+     <Compile Include="Assets\Scripts\Cost.cs" />
+     <Compile Include="Assets\Scripts\Managers\Edit_UIManager.cs" />
      <Compile Include="Assets\Scripts\Managers\EditorManager.cs" />
      <Compile Include="Assets\Scripts\Managers\ResultManager.cs" />
      <Compile Include="Assets\Scripts\Managers\ScenesManager.cs" />

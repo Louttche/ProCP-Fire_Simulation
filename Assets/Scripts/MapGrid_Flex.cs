@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapGrid_Flex : MonoBehaviour {
 
@@ -95,8 +96,11 @@ public class MapGrid_Flex : MonoBehaviour {
     public void LoadMap(SaveObject loadedMap){
         this._rows = loadedMap.rows;
         this._cols = loadedMap.cols;
-        Settings.st.ClearEmptyTiles();
-        currentTiles.Clear();
+        //Cost.c.budget = loadedMap.budget;
+        if (Settings.st != null)
+            Settings.st.ClearEmptyTiles();
+        if (currentTiles != null)
+            currentTiles.Clear();
 
         //Destroy previous tile objects to make a new one
         DestroyCurrentMap();
@@ -130,6 +134,7 @@ public class MapGrid_Flex : MonoBehaviour {
 
                             tileScript.tileID = tile.tileID;
                             tileScript.tilePosition = tile.tilePosition;
+                            tileScript.isOuterWall = tile.isOuterWall;
                             tileScript.SetSpriteFromTileType(tile.currentTileType);
                             //Add the tile in the list
                             currentTiles.Add(tileScript);  

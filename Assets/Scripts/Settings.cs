@@ -104,7 +104,8 @@ public class Settings : MonoBehaviour
         }
     }
     public void ClearEmptyTiles(){
-        currentEmptyTiles.Clear();
+        if (currentEmptyTiles != null)
+            currentEmptyTiles.Clear();
     }
     public void RoundSliderValue(){
         if (nrOfPeople_Slider.value != nrOfPeoplePerTile)
