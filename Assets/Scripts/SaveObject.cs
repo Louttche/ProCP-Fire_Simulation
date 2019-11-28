@@ -7,12 +7,17 @@ public class SaveObject
     public int rows, cols;
     public List<SavedTile> savedTiles = new List<SavedTile>();
     public float budget;
+    public float totalCost;
+    public Results results;
 
     public SaveObject(){
-        this.rows = MapGrid_Flex.mg._rows;
-        this.cols = MapGrid_Flex.mg._cols;
-        this.budget = Cost.c.budget;
-        foreach (var t in MapGrid_Flex.mg.currentTiles)
+        this.rows = Map.m._rows;
+        this.cols = Map.m._cols;
+        this.budget = Map.m.budget;
+        this.totalCost = Map.m.totalCost;
+        this.results = Map.m.results;
+
+        foreach (var t in Map.m.currentTiles)
         {
             SavedTile st = new SavedTile();
             st.tileID = t.tileID;

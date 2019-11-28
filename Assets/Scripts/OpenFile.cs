@@ -10,15 +10,22 @@ public static class OpenFile //: MonoBehaviour //EditorWindow
     public static StandaloneFileBrowserWindows sfbw = new StandaloneFileBrowserWindows();
 
     public static string SelectFilePath()
-    {        
-        var extensions = new [] {
-            new ExtensionFilter("JSON Files", "json"),
-        };
-        //string path = EditorUtility.OpenFilePanel("Select a map file", SaveSystem.SAVE_FOLDER, "json");
-        string path = GetPath(sfbw.OpenFilePanel("Open file", SaveSystem.SAVE_FOLDER, extensions, false));
-        if (path.Length != 0)
+    {   
+        try
         {
-            return path;
+            var extensions = new [] {
+            new ExtensionFilter("JSON Files", "json"),
+            };
+            //string path = EditorUtility.OpenFilePanel("Select a map file", SaveSystem.SAVE_FOLDER, "json");
+            string path = GetPath(sfbw.OpenFilePanel("Open file", SaveSystem.SAVE_FOLDER, extensions, false));
+            if (path.Length != 0)
+            {
+                return path;
+            }  
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Canceled file selection");
         }
         return null;
     }

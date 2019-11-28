@@ -55,23 +55,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\ChangeScenes.cs" />
-     <Compile Include="Assets\Scripts\Configure Map.cs" />
-     <Compile Include="Assets\Scripts\Cost.cs" />
-     <Compile Include="Assets\Scripts\Managers\Edit_UIManager.cs" />
-     <Compile Include="Assets\Scripts\Managers\EditorManager.cs" />
-     <Compile Include="Assets\Scripts\Managers\ResultManager.cs" />
-     <Compile Include="Assets\Scripts\Managers\ScenesManager.cs" />
-     <Compile Include="Assets\Scripts\Managers\TileManager.cs" />
-     <Compile Include="Assets\Scripts\Managers\UIManager.cs" />
+     <Compile Include="Assets\Scripts\GetMousePosition.cs" />
+     <Compile Include="Assets\Scripts\ISceneChange.cs" />
+     <Compile Include="Assets\Scripts\Managers\Editor Scene\Edit_Manager.cs" />
+     <Compile Include="Assets\Scripts\Managers\Editor Scene\Edit_UIManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\Main Scene\Main_Manager.cs" />
+     <Compile Include="Assets\Scripts\Managers\Main Scene\Main_UIManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\Results Scene\Results_Manager.cs" />
+     <Compile Include="Assets\Scripts\Managers\Results Scene\Results_UIManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\Simulation Scene\Simulation_Manager.cs" />
+     <Compile Include="Assets\Scripts\Managers\Simulation Scene\Simulation_UIManager.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
-     <Compile Include="Assets\Scripts\MapGrid_Flex.cs" />
+     <Compile Include="Assets\Scripts\MapInfo.cs" />
      <Compile Include="Assets\Scripts\OpenFile.cs" />
+     <Compile Include="Assets\Scripts\Results.cs" />
      <Compile Include="Assets\Scripts\SavedTile.cs" />
      <Compile Include="Assets\Scripts\SaveObject.cs" />
      <Compile Include="Assets\Scripts\SaveSystem.cs" />
-     <Compile Include="Assets\Scripts\Settings.cs" />
-     <Compile Include="Assets\Scripts\Simulation.cs" />
+     <Compile Include="Assets\Scripts\SharedInfo.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
      <Compile Include="Assets\Scripts\TileType.cs" />
      <Compile Include="Assets\StandaloneFileBrowser\IStandaloneFileBrowser.cs" />

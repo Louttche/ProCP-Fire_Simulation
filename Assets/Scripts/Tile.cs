@@ -9,7 +9,6 @@ public class Tile : MonoBehaviour
     public Sprite tileSprite;
     public tileType tileType;
     public float cost;
-
     public bool hasFireExt = false;
     public bool isOuterWall = false;
 
@@ -23,11 +22,10 @@ public class Tile : MonoBehaviour
             SetTileTypeFromCurrentSprite();
         }
         else{
-            this.tileSprite = EditorManager.em.fireExSprite;
+            this.tileSprite = SharedInfo.si.fireExSprite;
         }
     }
     
-
     public void SetCost(float cost){
         this.cost = cost;
     }
@@ -68,29 +66,29 @@ public class Tile : MonoBehaviour
     }
 
     public void SetSpriteFromTileType(tileType _tiletype){
-        if (EditorManager.em.spritesLoaded){
+        if (SharedInfo.si.spritesLoaded){
             switch (_tiletype)
             {
                 case tileType.Empty:
-                    this.tileSprite = EditorManager.em.emptySprite;
+                    this.tileSprite = SharedInfo.si.emptySprite;
                     break;
                 case tileType.Exit:
-                    this.tileSprite = EditorManager.em.exitSprite;
+                    this.tileSprite = SharedInfo.si.exitSprite;
                     break;
                 case tileType.FireEx:
-                    this.tileSprite = EditorManager.em.fireExSprite;
+                    this.tileSprite = SharedInfo.si.fireExSprite;
                     break;
                 case tileType.Fire:
-                    this.tileSprite = EditorManager.em.fireSprite;
+                    this.tileSprite = SharedInfo.si.fireSprite;
                     break;
                 case tileType.Wall:
-                    this.tileSprite = EditorManager.em.wallSprite;
+                    this.tileSprite = SharedInfo.si.wallSprite;
                     break;
                 case tileType.OuterWall:
-                    this.tileSprite = EditorManager.em.wallSprite;
+                    this.tileSprite = SharedInfo.si.wallSprite;
                     break;
                 case tileType.People:
-                    this.tileSprite = EditorManager.em.peopleSprite;
+                    this.tileSprite = SharedInfo.si.peopleSprite;
                     break;
                 default:
                     break;
