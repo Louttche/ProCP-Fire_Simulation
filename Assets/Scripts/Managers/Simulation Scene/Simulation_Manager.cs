@@ -46,9 +46,7 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
                 SaveObject so = JsonUtility.FromJson<SaveObject>(saveString);
                 //Instantiate the tiles
                 if (so != null){
-                    //ClearEmptyTiles();
                     Map.m.LoadMap(so);
-                    SharedInfo.si.currentMap = so;
                     ClearEmptyTiles();
                     AddEmptyTiles();
                     SetState(SimState.READYTOSTART);

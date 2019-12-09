@@ -82,9 +82,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10314}
     - Class: 114
-      Script: {instanceID: 10516}
+      Script: {instanceID: 10518}
     - Class: 114
-      Script: {instanceID: 10592}
+      Script: {instanceID: 10594}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -167,13 +167,13 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10328}
     - Class: 114
-      Script: {instanceID: 10516}
+      Script: {instanceID: 10518}
     - Class: 114
-      Script: {instanceID: 10520}
+      Script: {instanceID: 10522}
     - Class: 114
-      Script: {instanceID: 10832}
+      Script: {instanceID: 10834}
     - Class: 114
-      Script: {instanceID: 10928}
+      Script: {instanceID: 10930}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -230,9 +230,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10314}
     - Class: 114
-      Script: {instanceID: 10516}
+      Script: {instanceID: 10518}
     - Class: 114
-      Script: {instanceID: 10938}
+      Script: {instanceID: 10940}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -299,11 +299,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10314}
     - Class: 114
-      Script: {instanceID: 10516}
+      Script: {instanceID: 10518}
     - Class: 114
-      Script: {instanceID: 10520}
+      Script: {instanceID: 10522}
     - Class: 114
-      Script: {instanceID: 10962}
+      Script: {instanceID: 10964}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1031,7 +1031,7 @@ ScriptsOnlyBuild:
     className: ChatController
   - hash:
       serializedVersion: 2
-      Hash: 9c6ecd48b56b5a8e0e7e486dc495b17b
+      Hash: 31e2a68de6ec6f71536b7c58a6a61b3a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: SharedInfo

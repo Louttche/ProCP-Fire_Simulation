@@ -51,7 +51,7 @@ public class Tile : MonoBehaviour
                 other.transform.SetParent(this.transform);
                 other.transform.GetComponent<AIDestinationSetter>().target = this.nearestExit.transform;
                 SetSpriteFromTileType(tileType.People);
-                this.gameObject.layer = 10;
+                this.gameObject.layer = 8;
             } else if (this.tileType == tileType.Exit){
                 Destroy(other.gameObject);
                 Map.m.results.NrOfEscapes++;
@@ -79,7 +79,7 @@ public class Tile : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other) {
         if (other.CompareTag("Person")){
             this.tileSprite = initialTileSprite;
-            this.gameObject.layer = 8;
+            this.gameObject.layer = 10;
         }
     }
     public void SetCost(float cost){

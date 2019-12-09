@@ -13,6 +13,8 @@ public class SharedInfo : MonoBehaviour
     [HideInInspector]
     public Sprite TileSpriteSelected;
     public SaveObject currentMap;
+    public int rows, cols;
+    public float budget;
     public bool createNewMap = false;
 
     //Resources
@@ -27,7 +29,6 @@ public class SharedInfo : MonoBehaviour
             si = this;
             DontDestroyOnLoad(si);
         }
-        
         LoadSprites();
     }
 
@@ -35,15 +36,13 @@ public class SharedInfo : MonoBehaviour
     {
         if ((createNewMap) && (Map.m != null)){
             CallNewMapMethod();
-        }
-
-        UpdateCurrentMap();
-
+        } else if (!createNewMap)
+            UpdateCurrentMap();
     }
 
     private void LogResults(){
         if (currentMap != null){
-            foreach (Results r in currentMap.listOfResults)
+            foreach (Results r in currentMap.ListOfResults)
             {
                 Debug.Log($"\nID: {r.Result_ID}\n People Survived: {r.NrOfEscapes}");
             }
@@ -54,8 +53,10 @@ public class SharedInfo : MonoBehaviour
     {
         if (currentMap != null){
             //Update the list of results for the current map
-            currentMap = new SaveObject(); //Gets current grid's details from 'Map' class
-            LogResults();
+            if (Map.m.currentTiles.Count > 0){
+                currentMap = new SaveObject();
+                LogResults();
+            }
         }
     }
 
@@ -70,9 +71,9 @@ public class SharedInfo : MonoBehaviour
     }
     private void CallNewMapMethod(){
         Scene s = SceneManager.GetActiveScene();
-        if ((currentMap.rows != 0) && (currentMap.cols != 0) && (s.name == "Editor Scene")){
-            Map.m.budget = currentMap.budget;
-            Map.m.NewMap(currentMap.rows, currentMap.cols);
+        if ((this.rows != 0) && (this.cols != 0) && (s.name == "Editor Scene")){
+            Map.m.budget = this.budget;
+            Map.m.NewMap(this.rows, this.cols);
             createNewMap = false;
         }
     }

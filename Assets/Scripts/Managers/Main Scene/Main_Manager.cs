@@ -17,12 +17,11 @@ public class Main_Manager : MonoBehaviour, ISceneChange
         try
         {
             if (newMap){
-                if ((uiManager.rows.text != null) && (uiManager.cols.text != null)){   
-                    SharedInfo.si.currentMap.rows = int.Parse(uiManager.rows.text);
-                    SharedInfo.si.currentMap.cols = int.Parse(uiManager.cols.text);
-                    SharedInfo.si.currentMap.budget = int.Parse(uiManager.budget.text);
+                if ((uiManager.rows.text != null) && (uiManager.cols.text != null)){
+                    SharedInfo.si.rows = int.Parse(uiManager.rows.text);
+                    SharedInfo.si.cols = int.Parse(uiManager.cols.text);
+                    SharedInfo.si.budget = int.Parse(uiManager.budget.text);
                     SharedInfo.si.createNewMap = true;
-
                 }
             } else{
                 SharedInfo.si.createNewMap = false;

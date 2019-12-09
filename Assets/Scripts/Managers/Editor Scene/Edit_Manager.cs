@@ -17,10 +17,12 @@ public class Edit_Manager : MonoBehaviour, ISceneChange
         try
         {
             //Object to be saved as json
-            SaveObject so = new SaveObject();
-            string json = JsonUtility.ToJson(so);
-            //Debug.Log(json);
-            SaveSystem.Save(json);
+            if (Map.m != null){
+                SaveObject so = new SaveObject(); //new SaveObject();
+                string json = JsonUtility.ToJson(so);
+                //Debug.Log(json);
+                SaveSystem.Save(json);
+            }
         }
         catch (System.Exception)
         {

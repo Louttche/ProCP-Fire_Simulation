@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class SaveObject
 {
-    public int rows, cols;
-    public List<SavedTile> savedTiles = new List<SavedTile>();
-    public float budget;
-    public float totalCost;
-    public List<Results> listOfResults;
+    public int Rows, Cols;
+    public List<SavedTile> SavedTiles = new List<SavedTile>();
+    public float Budget;
+    public float TotalCost;
+    public List<Results> ListOfResults = new List<Results>();
 
     public SaveObject(){
-        this.rows = Map.m._rows;
-        this.cols = Map.m._cols;
-        this.budget = Map.m.budget;
-        this.totalCost = Map.m.totalCost;
-        this.listOfResults = Map.m.listOfResults;
+        this.Rows = Map.m._rows;
+        this.Cols = Map.m._cols;
+        this.Budget = Map.m.budget;
+        this.TotalCost = Map.m.totalCost;
+        this.ListOfResults = Map.m.listOfResults;
 
         foreach (var t in Map.m.currentTiles)
         {
@@ -24,7 +24,7 @@ public class SaveObject
             st.tilePosition = t.tilePosition;
             st.currentTileType = t.tileType;
             st.isOuterWall = t.isOuterWall;
-            this.savedTiles.Add(st);
+            this.SavedTiles.Add(st);
         }
     }
 }

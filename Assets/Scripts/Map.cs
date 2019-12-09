@@ -109,11 +109,12 @@ public class Map : MonoBehaviour {
     }
 
     public void LoadMap(SaveObject loadedMap){
-        this._rows = loadedMap.rows;
-        this._cols = loadedMap.cols;
-        this.budget = loadedMap.budget;
-        this.listOfResults = loadedMap.listOfResults;
-        this.results = new Results();
+        this._rows = loadedMap.Rows;
+        this._cols = loadedMap.Cols;
+        this.budget = loadedMap.Budget;
+        //if (loadedMap.ListOfResults != null)
+         //   this.listOfResults = loadedMap.ListOfResults;
+        //this.results = new Results();
 
         if (currentTiles != null)
             currentTiles.Clear();
@@ -142,7 +143,7 @@ public class Map : MonoBehaviour {
                 cO.transform.SetParent(transform);
 
                 //set the proper data from the loaded tiles to the newly instantiated tile object
-                foreach (var tile in loadedMap.savedTiles)
+                foreach (var tile in loadedMap.SavedTiles)
                 {
                     if (tile.tilePosition == pos){
                         cO.name = tile.tileID.ToString();

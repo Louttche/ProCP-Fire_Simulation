@@ -32,7 +32,7 @@ public class Results
         this.NrOfDeaths = 0;
         this.NrOfInjuries = 0;
         this.NrOfEscapes = 0;
-        this.Result_ID = GetRightID();
+        //this.Result_ID = GetRightID();
         this.TotalScore = GetTotalScore();
     }
 
