@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,19 +14,21 @@ public class Map : MonoBehaviour {
     public float budget;
     public float totalCost;
     public Results results;
-
+    public List<Results> listOfResults = new List<Results>();
     public Vector2 gridSize;
     public Vector2 OriginalGridSize;
 
     [SerializeField]
     private Vector2 gridOffset;
     public GameObject tilePrefab;
-    private Vector2 tileSize;
+    [HideInInspector]
+    public Vector2 tileSize;
     private Vector2 tileScale;
     private int tileID = 1;
 
     [HideInInspector]
     public Vector2 OriginalSpriteSize;
+    public Vector2 originalTileSize;
 
     [HideInInspector]
     public List<Tile> currentTiles = new List<Tile>();
@@ -40,11 +43,19 @@ public class Map : MonoBehaviour {
         OriginalSpriteSize = SharedInfo.si.emptySprite.bounds.size;
     }
 
+    public void SaveCurrentResults(){
+        listOfResults.Add(this.results);
+        
+        //Save the changes of the current map to the file
+        string json = JsonUtility.ToJson(SharedInfo.si.currentMap);
+        SaveSystem.Save(json);
+    }
+
     public void NewMap(int row, int col)
     {
         this._rows = row;
         this._cols = col;
-        this.results = null;
+        listOfResults.Clear();
         //Destroy previous tile objects to make a new one
         DestroyCurrentMap();
 
@@ -101,7 +112,8 @@ public class Map : MonoBehaviour {
         this._rows = loadedMap.rows;
         this._cols = loadedMap.cols;
         this.budget = loadedMap.budget;
-        this.results = loadedMap.results;
+        this.listOfResults = loadedMap.listOfResults;
+        this.results = new Results();
 
         if (currentTiles != null)
             currentTiles.Clear();
@@ -116,44 +128,80 @@ public class Map : MonoBehaviour {
         SetTilesize_Gridsize();
 
         for (int row = 0; row < this._rows; row++)
+        {
+            for (int col = 0; col < this._cols; col++)
             {
-                for (int col = 0; col < this._cols; col++)
+                //TO-DO: SetLoadedMapSprites();
+
+                //add the platform size so that no two tiles will have the same x and y position
+                Vector2 pos = new Vector2(col * tileSize.x + gridOffset.x + transform.position.x, row * tileSize.y + gridOffset.y + transform.position.y);
+                //instantiate the game object, at position pos, with rotation set to identity
+                GameObject cO = Instantiate(tilePrefab, pos, Quaternion.identity) as GameObject;
+                
+                //set the parent of the platform to GRID so you can move the cells together with the grid + show on canvas;
+                cO.transform.SetParent(transform);
+
+                //set the proper data from the loaded tiles to the newly instantiated tile object
+                foreach (var tile in loadedMap.savedTiles)
                 {
-                    //TO-DO: SetLoadedMapSprites();
+                    if (tile.tilePosition == pos){
+                        cO.name = tile.tileID.ToString();
+                        Tile tileScript = cO.GetComponent<Tile>();
 
-                    //add the platform size so that no two tiles will have the same x and y position
-                    Vector2 pos = new Vector2(col * tileSize.x + gridOffset.x + transform.position.x, row * tileSize.y + gridOffset.y + transform.position.y);
-                    //instantiate the game object, at position pos, with rotation set to identity
-                    GameObject cO = Instantiate(tilePrefab, pos, Quaternion.identity) as GameObject;
-                    
-                    //set the parent of the platform to GRID so you can move the cells together with the grid + show on canvas;
-                    cO.transform.SetParent(transform);
-
-                    //set the proper data from the loaded tiles to the newly instantiated tile object
-                    foreach (var tile in loadedMap.savedTiles)
-                    {
-                        if (tile.tilePosition == pos){
-                            cO.name = tile.tileID.ToString();
-                            Tile tileScript = cO.GetComponent<Tile>();
-
-                            tileScript.tileID = tile.tileID;
-                            tileScript.tilePosition = tile.tilePosition;
-                            tileScript.isOuterWall = tile.isOuterWall;
-                            tileScript.SetSpriteFromTileType(tile.currentTileType);
-                            //Add the tile in the list
-                            currentTiles.Add(tileScript);  
-                        }
+                        tileScript.tileID = tile.tileID;
+                        tileScript.tilePosition = tile.tilePosition;
+                        tileScript.isOuterWall = tile.isOuterWall;
+                        tileScript.SetSpriteFromTileType(tile.currentTileType);
+                        //Add the tile in the list
+                        currentTiles.Add(tileScript);  
                     }
-
-                    //Set the 'Z-axis' to 0 or else the sprite won't show on the screen
-                    cO.transform.localPosition = new Vector3(cO.transform.localPosition.x, cO.transform.localPosition.y, 0);
-                    
-                    //Make the tiles clickable and set the proper tag
-                    cO.AddComponent<BoxCollider2D>();
-                    cO.GetComponent<BoxCollider2D>().isTrigger = true;
-                    cO.tag = "tile";            
                 }
+
+                //Set the 'Z-axis' to 0 or else the sprite won't show on the screen
+                cO.transform.localPosition = new Vector3(cO.transform.localPosition.x, cO.transform.localPosition.y, 0);
+                
+                //Make the tiles clickable and set the proper tag
+                originalTileSize = cO.GetComponent<BoxCollider2D>().size;
+                cO.tag = "tile";
             }
+        }
+    }
+
+    public void UpdateCurrentTilesList(){
+        currentTiles.Clear();
+        foreach(Transform tile in transform)
+        {
+            Tile tileScript = tile.GetComponent<Tile>();
+
+            if (tileScript != null){
+                SetCollider(tileScript);
+                this.currentTiles.Add(tileScript); 
+            }
+        }
+    }
+
+    private void SetCollider(Tile tile)
+    {
+        if (tile.GetComponent<BoxCollider2D>() != null){            
+            switch (tile.tileType)
+            {
+                case tileType.People:
+                    tile.GetComponent<BoxCollider2D>().size = originalTileSize;
+                    break;
+                case tileType.FireEx:
+                    tile.GetComponent<BoxCollider2D>().size = originalTileSize * 3;
+                    break;
+                case tileType.Fire:
+                    tile.GetComponent<BoxCollider2D>().size = originalTileSize * 4;
+                    break;
+                default:
+                    tile.GetComponent<BoxCollider2D>().size = originalTileSize;
+                    break;
+            }
+        } else {
+            tile.gameObject.AddComponent<BoxCollider2D>();
+        }
+        
     }
 
     //so you can see the width and height of the grid in the scene
@@ -196,5 +244,11 @@ public class Map : MonoBehaviour {
             }
             tileID = 1;
         }
+    }
+
+    public void SetResults(int nrOfDeaths, int nrOfInjuries, int nrOfEscapes){
+        this.results.NrOfEscapes = nrOfEscapes;
+        this.results.NrOfDeaths = nrOfDeaths;
+        this.results.NrOfInjuries = nrOfInjuries;
     }
 }

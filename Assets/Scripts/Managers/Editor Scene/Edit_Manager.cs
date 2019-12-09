@@ -7,10 +7,16 @@ public class Edit_Manager : MonoBehaviour, ISceneChange
 {
     public Edit_UIManager uIManager;
 
+    private void Awake() {
+        if (SharedInfo.si == null){
+            GoToMainScene();
+        }
+    }
+
     public void Save(){
         try
         {
-            //Object to be saved through json (saves current tile grid automatically)
+            //Object to be saved as json
             SaveObject so = new SaveObject();
             string json = JsonUtility.ToJson(so);
             //Debug.Log(json);

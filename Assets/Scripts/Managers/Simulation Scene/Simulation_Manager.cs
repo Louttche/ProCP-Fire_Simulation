@@ -2,21 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Pathfinding;
+using System;
 
 public class Simulation_Manager : MonoBehaviour, ISceneChange
 {
     public Simulation_UIManager uiManager;
+    public SimState simulationState;
+    public GameObject pathFinder;
+    public GameObject personPrefab;
+
+    //public static float secondsPerTick = 1f;
     
     public List<Tile> currentEmptyTiles = new List<Tile>();
-    public bool readyToStart = false, runningSimulation = false, paused = false;
-
+    public static List<Tile> listOfExits = new List<Tile>();
     public float nrOfPeople;
+    public static int nrOfEscapes;
 
-    private void Update() {
-        if (Input.GetMouseButtonDown(0)){
-            SetFireExt();
+    private void Awake() {
+        pathFinder.SetActive(false);
+        if (SharedInfo.si == null){
+            GoToMainScene();
         }
     }
+    private void Start() {
+        personPrefab.GetComponentInChildren<SpriteRenderer>().sortingLayerName = "Foreground";
+    }
+    private void Update() {
+        if ((Input.GetMouseButtonDown(0)) && (simulationState == SimState.READYTOSTART)){
+            SetFireExt();
+        }
+
+        if (this.simulationState == SimState.RUNNING)
+            CheckIfSimulationIsDone();
+    }
+
     public void Load(){
         try
         {
@@ -28,6 +48,10 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
                 if (so != null){
                     //ClearEmptyTiles();
                     Map.m.LoadMap(so);
+                    SharedInfo.si.currentMap = so;
+                    ClearEmptyTiles();
+                    AddEmptyTiles();
+                    SetState(SimState.READYTOSTART);
                 }
             } else
                 Debug.Log("Could not load!");
@@ -39,19 +63,78 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         }
     }
 
-    public void StartSimulation(){ //Called when 'Start' button is pressed
-        uiManager.SetPeople();
+    public void SetState(SimState state){
+        this.simulationState = state;
+    }
+    public void ScanObstacles(){
+        pathFinder.GetComponent<AstarPath>().Scan();
+    }
+    
+    public void SetPeople(){
+        bool done = false;
+        int i = 0;
+        while (!done){
+            int randomEmptyTile = UnityEngine.Random.Range(0, currentEmptyTiles.Count);
+            Tile currentRandomTile = currentEmptyTiles[randomEmptyTile];
 
-        //TO-DO: Actual Simulation stuff
+            if (currentRandomTile.tileType != tileType.People){
+                Instantiate(personPrefab, currentRandomTile.tilePosition, Quaternion.identity, currentRandomTile.transform);
+                currentRandomTile.SetSpriteFromTileType(tileType.People);
+                currentRandomTile.SetTileTypeFromCurrentSprite();
+                i++;
+            }
+            
+            if (i >= uiManager.nrOfPeople_Slider.value){
+                done = true;
+            }
+        }
+        Map.m.UpdateCurrentTilesList();
+    }
+    public void StartSimulation(){ //Called when 'Start' button is pressed
+        SetState(SimState.RUNNING);
+        if (pathFinder.activeSelf){
+            ScanObstacles();
+        } else
+            pathFinder.SetActive(true);
+        Map.m.results = new Results();
+        UpdateExitList();
+        SetPeople();
     }
 
     public void StopSimulation(){ //Called when 'Stop' button is pressed
-        uiManager.ResetPeople();
+        SetState(SimState.IDLE);
+        ResetPeople();
     }
 
-    public void pauseSimulation(bool pause){
-        paused = pause;
-        runningSimulation = !pause;
+    public void CheckIfSimulationIsDone(){
+        GameObject[] people = GameObject.FindGameObjectsWithTag("Person");
+        if (people.Length == 0){
+            StopSimulation();
+            uiManager.resultsPanel.SetActive(true);
+            uiManager.nrOfEscapes_Text.text = Map.m.results.NrOfEscapes.ToString();
+            uiManager.nrOfDeaths_Text.text = Map.m.results.NrOfDeaths.ToString();
+            uiManager.nrOfInjuries_Text.text = Map.m.results.NrOfInjuries.ToString();
+        }
+    }
+    private void UpdateExitList()
+    {
+        listOfExits.Clear();
+        foreach (Tile tile in Map.m.currentTiles)
+        {
+            if (tile.tileType == tileType.Exit){
+                listOfExits.Add(tile);
+            }
+        }
+    }
+
+
+    public void ResetPeople(){
+        GameObject[] people = GameObject.FindGameObjectsWithTag("Person");
+        foreach (var person in people)
+        {
+            Destroy(person);
+        }
+        Map.m.UpdateCurrentTilesList();
     }
 
     private void SetFireExt(){

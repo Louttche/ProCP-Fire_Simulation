@@ -8,14 +8,14 @@ public class SaveObject
     public List<SavedTile> savedTiles = new List<SavedTile>();
     public float budget;
     public float totalCost;
-    public Results results;
+    public List<Results> listOfResults;
 
     public SaveObject(){
         this.rows = Map.m._rows;
         this.cols = Map.m._cols;
         this.budget = Map.m.budget;
         this.totalCost = Map.m.totalCost;
-        this.results = Map.m.results;
+        this.listOfResults = Map.m.listOfResults;
 
         foreach (var t in Map.m.currentTiles)
         {

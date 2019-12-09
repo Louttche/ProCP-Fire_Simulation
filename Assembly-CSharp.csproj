@@ -63,6 +63,7 @@
      <Compile Include="Assets\Scripts\Managers\Main Scene\Main_UIManager.cs" />
      <Compile Include="Assets\Scripts\Managers\Results Scene\Results_Manager.cs" />
      <Compile Include="Assets\Scripts\Managers\Results Scene\Results_UIManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\Simulation Scene\Simulation State.cs" />
      <Compile Include="Assets\Scripts\Managers\Simulation Scene\Simulation_Manager.cs" />
      <Compile Include="Assets\Scripts\Managers\Simulation Scene\Simulation_UIManager.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
@@ -345,6 +346,9 @@
  </Reference>
  <Reference Include="nunit.framework">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.5f1/Editor/Data/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll</HintPath>
+ </Reference>
+ <Reference Include="Pathfinding.Ionic.Zip.Reduced">
+ <HintPath>C:/Users/31627/Documents/Github/Floor Plan Editor/Assets/AstarPathfindingProject/Plugins/DotNetZip/Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
  </Reference>
  <Reference Include="Ookii.Dialogs">
  <HintPath>C:/Users/31627/Documents/Github/Floor Plan Editor/Assets/StandaloneFileBrowser/Plugins/Ookii.Dialogs.dll</HintPath>
@@ -715,6 +719,20 @@
  <Reference Include="Boo.Lang">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.5f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="AstarPathfindingProject.csproj">
+      <Project>{1115DF28-ACBE-855D-E37B-3F143EDEBFD5}</Project>
+      <Name>AstarPathfindingProject</Name>
+    </ProjectReference>
+    <ProjectReference Include="PackageToolsEditor.csproj">
+      <Project>{128356C3-0350-1207-A423-03E23CCDEC88}</Project>
+      <Name>PackageToolsEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
+      <Project>{E4C50C5A-C2D8-4BAD-97ED-20BB75A1E847}</Project>
+      <Name>AstarPathfindingProjectEditor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

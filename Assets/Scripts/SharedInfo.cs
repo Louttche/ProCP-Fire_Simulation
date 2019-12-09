@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,15 +12,13 @@ public class SharedInfo : MonoBehaviour
     
     [HideInInspector]
     public Sprite TileSpriteSelected;
-    public int rows, cols;
+    public SaveObject currentMap;
     public bool createNewMap = false;
-
-    //Costs
-    public float budget;
 
     //Resources
     [HideInInspector]
     public Sprite wallSprite, emptySprite, exitSprite, fireExSprite, fireSprite, peopleSprite;
+
     [HideInInspector]
     public bool spritesLoaded = false;
 
@@ -37,6 +36,27 @@ public class SharedInfo : MonoBehaviour
         if ((createNewMap) && (Map.m != null)){
             CallNewMapMethod();
         }
+
+        UpdateCurrentMap();
+
+    }
+
+    private void LogResults(){
+        if (currentMap != null){
+            foreach (Results r in currentMap.listOfResults)
+            {
+                Debug.Log($"\nID: {r.Result_ID}\n People Survived: {r.NrOfEscapes}");
+            }
+        }
+    }
+
+    public void UpdateCurrentMap()
+    {
+        if (currentMap != null){
+            //Update the list of results for the current map
+            currentMap = new SaveObject(); //Gets current grid's details from 'Map' class
+            LogResults();
+        }
     }
 
     private void LoadSprites(){
@@ -50,12 +70,10 @@ public class SharedInfo : MonoBehaviour
     }
     private void CallNewMapMethod(){
         Scene s = SceneManager.GetActiveScene();
-        if ((this.rows != 0) && (this.cols != 0) && (s.name == "Editor Scene")){
-            Map.m.budget = this.budget;
-            Map.m.NewMap(rows, cols);
+        if ((currentMap.rows != 0) && (currentMap.cols != 0) && (s.name == "Editor Scene")){
+            Map.m.budget = currentMap.budget;
+            Map.m.NewMap(currentMap.rows, currentMap.cols);
             createNewMap = false;
-            this.rows = 0;
-            this.cols = 0;
         }
     }
 }
