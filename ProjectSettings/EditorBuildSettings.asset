@@ -5,7 +5,28 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Floor Plan Editor.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/Main Scene.unity
+    guid: 06416047106d08448be1c3b1c03afa39
+  - enabled: 1
+    path: Assets/Scenes/Editor Scene.unity
+    guid: 83896bb10bba8db4aa1900b998a6c574
+  - enabled: 1
+    path: Assets/Scenes/Result Scene.unity
+    guid: ee21620ca70bf494483739dd0e1aca07
+  - enabled: 1
+    path: Assets/Scenes/Simulation Scene.unity
+    guid: e3eb11a9287d510419c2d796280e399a
   m_configObjects: {}

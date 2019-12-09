@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Item
   - tile
+  - Person
   layers:
   - Default
   - TransparentFX
@@ -15,11 +16,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Person
+  - Interactable
+  - Walkable
+  - Fire
+  - Obstacle
   - 
   - 
   - 
@@ -42,4 +43,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3526322131
+    locked: 0
+  - name: Foreground
+    uniqueID: 2789867145
     locked: 0
