@@ -9,10 +9,10 @@ public class Map : MonoBehaviour {
     public static Map m;
 
     //Map standard information
-    public int _rows;
-    public int _cols;
-    public float budget;
-    public float totalCost;
+    public int _rows = 0;
+    public int _cols = 0;
+    public float budget = 0;
+    public float totalCost = 0;
     public Results results;
     public List<Results> listOfResults = new List<Results>();
     public Vector2 gridSize;
@@ -32,6 +32,7 @@ public class Map : MonoBehaviour {
 
     [HideInInspector]
     public List<Tile> currentTiles = new List<Tile>();
+    public string fileName;
 
     private void Awake() {
         m = this;
@@ -43,12 +44,8 @@ public class Map : MonoBehaviour {
         OriginalSpriteSize = SharedInfo.si.emptySprite.bounds.size;
     }
 
-    public void SaveCurrentResults(){
-        listOfResults.Add(this.results);
-        
-        //Save the changes of the current map to the file
-        string json = JsonUtility.ToJson(SharedInfo.si.currentMap);
-        SaveSystem.Save(json);
+    private void Update() {
+        this.results.totalScore = this.results.GetTotalScore();    
     }
 
     public void NewMap(int row, int col)
@@ -106,15 +103,14 @@ public class Map : MonoBehaviour {
                 currentTiles.Add(tileScript);
             }
         }
+        SharedInfo.si.UpdateCurrentMap();
     }
 
     public void LoadMap(SaveObject loadedMap){
         this._rows = loadedMap.Rows;
         this._cols = loadedMap.Cols;
         this.budget = loadedMap.Budget;
-        //if (loadedMap.ListOfResults != null)
-         //   this.listOfResults = loadedMap.ListOfResults;
-        //this.results = new Results();
+        this.listOfResults = loadedMap.ListOfResults;
 
         if (currentTiles != null)
             currentTiles.Clear();
@@ -166,6 +162,7 @@ public class Map : MonoBehaviour {
                 cO.tag = "tile";
             }
         }
+        SharedInfo.si.UpdateCurrentMap();
     }
 
     public void UpdateCurrentTilesList(){
@@ -245,11 +242,5 @@ public class Map : MonoBehaviour {
             }
             tileID = 1;
         }
-    }
-
-    public void SetResults(int nrOfDeaths, int nrOfInjuries, int nrOfEscapes){
-        this.results.NrOfEscapes = nrOfEscapes;
-        this.results.NrOfDeaths = nrOfDeaths;
-        this.results.NrOfInjuries = nrOfInjuries;
     }
 }

@@ -8,6 +8,12 @@ public class Results_Manager : MonoBehaviour, ISceneChange
 {
     public Results_UIManager results_UIManager;
 
+    public List<SaveObject> selectedMaps = new List<SaveObject>();
+
+    public void AddSelection(){
+
+    }
+
     public void GetAndShowSavedMaps(){
         int i = 1;
 
@@ -34,6 +40,22 @@ public class Results_Manager : MonoBehaviour, ISceneChange
                 //Debug.Log(file);
             }
         }
+    }
+
+    public float GetAverageTotalScoreOfMap(SaveObject map){
+        float avgTotalScore = 0;
+        if (map.ListOfResults != null){
+            foreach (var result in map.ListOfResults)
+            {
+                avgTotalScore += result.GetTotalScore();
+            }
+            return avgTotalScore / map.ListOfResults.Count;
+        } else
+            return avgTotalScore;
+    }
+
+    public void ShowResultsForMap(){
+        
     }
 
     public void GoToEditorScene(bool newMap)

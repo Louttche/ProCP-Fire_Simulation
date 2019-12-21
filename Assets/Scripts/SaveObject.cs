@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SaveObject
 {
+    public string fileName;
     public int Rows, Cols;
     public List<SavedTile> SavedTiles = new List<SavedTile>();
     public float Budget;
@@ -11,12 +12,13 @@ public class SaveObject
     public List<Results> ListOfResults = new List<Results>();
 
     public SaveObject(){
+        this.fileName = Map.m.fileName;
         this.Rows = Map.m._rows;
         this.Cols = Map.m._cols;
         this.Budget = Map.m.budget;
         this.TotalCost = Map.m.totalCost;
         this.ListOfResults = Map.m.listOfResults;
-
+        
         foreach (var t in Map.m.currentTiles)
         {
             SavedTile st = new SavedTile();

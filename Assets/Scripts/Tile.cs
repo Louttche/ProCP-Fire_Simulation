@@ -54,7 +54,7 @@ public class Tile : MonoBehaviour
                 this.gameObject.layer = 8;
             } else if (this.tileType == tileType.Exit){
                 Destroy(other.gameObject);
-                Map.m.results.NrOfEscapes++;
+                Map.m.results.nrOfEscapes++;
             }
         }
     }

@@ -20,7 +20,6 @@ public class Edit_Manager : MonoBehaviour, ISceneChange
             if (Map.m != null){
                 SaveObject so = new SaveObject(); //new SaveObject();
                 string json = JsonUtility.ToJson(so);
-                //Debug.Log(json);
                 SaveSystem.Save(json);
             }
         }
