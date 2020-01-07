@@ -20,7 +20,7 @@ public static class OpenFile //: MonoBehaviour //EditorWindow
             string path = GetPath(sfbw.OpenFilePanel("Open file", SaveSystem.SAVE_FOLDER, extensions, false));
             if (path.Length != 0)
             {
-                Map.m.fileName = Path.GetFileName(path);
+                SaveSystem.currentMapFileName = Path.GetFileName(path);
                 return path;
             }  
         }

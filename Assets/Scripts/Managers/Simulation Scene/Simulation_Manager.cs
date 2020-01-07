@@ -45,7 +45,7 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
                 SaveObject so = JsonUtility.FromJson<SaveObject>(saveString);
                 //Instantiate the tiles
                 if (so != null){
-                    Map.m.LoadMap(so);
+                    Map.m.LoadMap(so, true);
                     ClearEmptyTiles();
                     AddEmptyTiles();
                     SetState(SimState.READYTOSTART);
@@ -64,6 +64,7 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         this.simulationState = state;
     }
     public void ScanObstacles(){
+        Debug.Log("Scanning obstacles...");
         pathFinder.GetComponent<AstarPath>().Scan();
     }
     
@@ -91,8 +92,9 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         SetState(SimState.RUNNING);
         if (pathFinder.activeSelf){
             ScanObstacles();
-        } else
+        } else{
             pathFinder.SetActive(true);
+        }
         Map.m.results = new Results();
         UpdateExitList();
         SetPeople();
@@ -112,6 +114,7 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
     }
 
     public void SaveCurrentResults(){ //Called by the 'save results' button
+        Map.m.results.totalScore = Map.m.results.GetTotalScore();
         Map.m.listOfResults.Add(Map.m.results);
         SharedInfo.si.UpdateCurrentMap();
         //Save the changes of the current map to the file

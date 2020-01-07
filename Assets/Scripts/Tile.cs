@@ -26,7 +26,13 @@ public class Tile : MonoBehaviour
             EditMode();
         } else if (activeScene.name == "Simulation Scene"){
             SimulationMode();
+        } else if (activeScene.name == "Result Scene"){
+            ResultsMode();
         }
+    }
+
+    public void ResultsMode(){
+        this.gameObject.GetComponent<SpriteRenderer>().sprite = this.tileSprite;
     }
 
     public void SimulationMode(){

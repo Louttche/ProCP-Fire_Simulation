@@ -32,15 +32,22 @@ public class SharedInfo : MonoBehaviour
         LoadSprites();
     }
 
-    private void FixedUpdate() {
-        if ((createNewMap) && (Map.m != null))
+    private void Update(){
+        if ((createNewMap) && (Map.m != null)){
             CallNewMapMethod();
+        }
+        
+        if (currentMap != null)
+            Debug.Log($"current map: {currentMap.fileName}");
+        
+        //if (Map.m == null)
+          //  currentMap = null;
     }
 
     public void UpdateCurrentMap()
     {
         if (Map.m != null){
-            currentMap = new SaveObject(); //Calling the constructor of the 'SaveObject' gets the information of the currently displayed grid gets saved
+            currentMap = new SaveObject(true); //Calling the constructor of 'SaveObject' saves the information from the currently displayed grid
         } else {
             currentMap = null;
         }

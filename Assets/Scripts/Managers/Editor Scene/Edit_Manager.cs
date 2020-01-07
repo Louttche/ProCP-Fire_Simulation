@@ -18,7 +18,7 @@ public class Edit_Manager : MonoBehaviour, ISceneChange
         {
             //Object to be saved as json
             if (Map.m != null){
-                SaveObject so = new SaveObject(); //new SaveObject();
+                SaveObject so = new SaveObject(true); //new SaveObject();
                 string json = JsonUtility.ToJson(so);
                 SaveSystem.Save(json);
             }
@@ -39,7 +39,7 @@ public class Edit_Manager : MonoBehaviour, ISceneChange
                 SaveObject so = JsonUtility.FromJson<SaveObject>(saveString);
                 //Instantiate the tiles
                 if (so != null){
-                    Map.m.LoadMap(so);
+                    Map.m.LoadMap(so, true);
                 }
             } else
                 Debug.Log("Could not load!");

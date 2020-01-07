@@ -45,7 +45,7 @@ public class Map : MonoBehaviour {
     }
 
     private void Update() {
-        this.results.totalScore = this.results.GetTotalScore();    
+        this.results.totalScore = this.results.GetTotalScore();
     }
 
     public void NewMap(int row, int col)
@@ -106,11 +106,12 @@ public class Map : MonoBehaviour {
         SharedInfo.si.UpdateCurrentMap();
     }
 
-    public void LoadMap(SaveObject loadedMap){
+    public void LoadMap(SaveObject loadedMap, bool updateMap){
         this._rows = loadedMap.Rows;
         this._cols = loadedMap.Cols;
         this.budget = loadedMap.Budget;
         this.listOfResults = loadedMap.ListOfResults;
+        this.fileName = loadedMap.fileName;
 
         if (currentTiles != null)
             currentTiles.Clear();
@@ -123,6 +124,9 @@ public class Map : MonoBehaviour {
 
         //Set the proper size of the tiles and the grid
         SetTilesize_Gridsize();
+
+        //Testing stuff below
+        int tileNumber = 1;
 
         for (int row = 0; row < this._rows; row++)
         {
@@ -141,7 +145,7 @@ public class Map : MonoBehaviour {
                 //set the proper data from the loaded tiles to the newly instantiated tile object
                 foreach (var tile in loadedMap.SavedTiles)
                 {
-                    if (tile.tilePosition == pos){
+                    if (tile.tileID == tileNumber){//if (tile.tilePosition == pos){
                         cO.name = tile.tileID.ToString();
                         Tile tileScript = cO.GetComponent<Tile>();
 
@@ -160,9 +164,11 @@ public class Map : MonoBehaviour {
                 //Make the tiles clickable and set the proper tag
                 originalTileSize = cO.GetComponent<BoxCollider2D>().size;
                 cO.tag = "tile";
+                tileNumber++;
             }
         }
-        SharedInfo.si.UpdateCurrentMap();
+        if (updateMap)
+            SharedInfo.si.UpdateCurrentMap();
     }
 
     public void UpdateCurrentTilesList(){
