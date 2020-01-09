@@ -8,6 +8,11 @@ public class Edit_UIManager : MonoBehaviour
     public Edit_Manager edit_Manager;
     public List<GameObject> BuildingTiles = new List<GameObject>();
     public TMPro.TextMeshProUGUI lbl_totalCost, lbl_budget;
+    public Button btn_NewMap;
+    public Button btn_confirm;
+    public GameObject panelDimensions;
+    public TMPro.TMP_InputField rows, cols, budget;
+    public TMPro.TextMeshProUGUI initialTotalCost;
     //public Sprite TileSpriteSelected;
 
     private void Start() {
@@ -16,6 +21,8 @@ public class Edit_UIManager : MonoBehaviour
         {
             b.GetComponent<Button>().onClick.AddListener(() => SetTileSelected(b.GetComponent<Button>(), b.GetComponent<Image>().sprite));
         }
+
+        //btn_NewMap.onClick.AddListener(() => Map.m.NewMap());
     }
 
     private void Update() {

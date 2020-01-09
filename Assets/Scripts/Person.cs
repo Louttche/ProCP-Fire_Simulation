@@ -11,5 +11,5 @@ public class Person : MonoBehaviour
         Panic
     }
 
-    
+
 }

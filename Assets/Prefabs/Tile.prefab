@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5778533340789376288}
   - component: {fileID: 3075351610815491801}
   - component: {fileID: -6010519278655744320}
+  - component: {fileID: 4605512751157985746}
   m_Layer: 5
   m_Name: Tile
   m_TagString: Untagged
@@ -30,7 +31,7 @@ RectTransform:
   m_GameObject: {fileID: 3720520058002653003}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20.833334, y: 20.833334, z: 0}
+  m_LocalScale: {x: 14.705882, y: 14.705883, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -69,6 +70,7 @@ MonoBehaviour:
   hasFireExt: 0
   isOuterWall: 0
   nearestExit: {fileID: 0}
+  surroundTiles: []
 --- !u!212 &5778533340789376288
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -164,3 +166,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!58 &4605512751157985746
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3720520058002653003}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.19790106
