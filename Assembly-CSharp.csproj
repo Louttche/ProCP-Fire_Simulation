@@ -69,14 +69,13 @@
      <Compile Include="Assets\Scripts\Map.cs" />
      <Compile Include="Assets\Scripts\MapInfo.cs" />
      <Compile Include="Assets\Scripts\OpenFile.cs" />
+     <Compile Include="Assets\Scripts\Person.cs" />
      <Compile Include="Assets\Scripts\Results.cs" />
      <Compile Include="Assets\Scripts\SavedTile.cs" />
      <Compile Include="Assets\Scripts\SaveObject.cs" />
      <Compile Include="Assets\Scripts\SaveSystem.cs" />
      <Compile Include="Assets\Scripts\SharedInfo.cs" />
      <Compile Include="Assets\Scripts\ShowInfo.cs" />
-     <Compile Include="Assets\Scripts\Testing\ResultMap.cs" />
-     <Compile Include="Assets\Scripts\Testing\Test_Results.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
      <Compile Include="Assets\Scripts\TileType.cs" />
      <Compile Include="Assets\StandaloneFileBrowser\IStandaloneFileBrowser.cs" />

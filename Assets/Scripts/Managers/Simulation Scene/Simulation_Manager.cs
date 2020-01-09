@@ -13,17 +13,17 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
     public GameObject personPrefab;
 
     //public static float secondsPerTick = 1f;
-    
+    public List<Tile> fireExtTiles = new List<Tile>();
     public List<Tile> currentEmptyTiles = new List<Tile>();
     public static List<Tile> listOfExits = new List<Tile>();
 
 
     private void Awake() {
-        pathFinder.SetActive(false);
         if (SharedInfo.si == null){
             GoToMainScene();
         }
     }
+    
     private void Start() {
         personPrefab.GetComponentInChildren<SpriteRenderer>().sortingLayerName = "Foreground";
     }
@@ -88,16 +88,29 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         }
         Map.m.UpdateCurrentTilesList();
     }
+    
     public void StartSimulation(){ //Called when 'Start' button is pressed
         SetState(SimState.RUNNING);
-        if (pathFinder.activeSelf){
+        //if (pathFinder.activeSelf){
             ScanObstacles();
-        } else{
-            pathFinder.SetActive(true);
-        }
+        //} else{
+        //    pathFinder.SetActive(true);
+       // }
         Map.m.results = new Results();
         UpdateExitList();
+        UpdateFireExtList();
         SetPeople();
+    }
+
+    private void UpdateFireExtList()
+    {
+        fireExtTiles.Clear();
+        foreach (Tile tile in Map.m.currentTiles)
+        {
+            if (tile.hasFireExt){
+                fireExtTiles.Add(tile);
+            }
+        }
     }
 
     public void StopSimulation(){ //Called when 'Stop' button is pressed

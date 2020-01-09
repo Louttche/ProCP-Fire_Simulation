@@ -23,6 +23,7 @@ public class Results
     public int nrOfInjuries;
     public int nrOfEscapes;
     public int totalScore;
+    public int nrOfPeople;
 
     public Results(){
         this.nrOfDeaths = 0;
