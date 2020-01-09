@@ -26,7 +26,13 @@ public class Tile : MonoBehaviour
             EditMode();
         } else if (activeScene.name == "Simulation Scene"){
             SimulationMode();
+        } else if (activeScene.name == "Result Scene"){
+            ResultsMode();
         }
+    }
+
+    public void ResultsMode(){
+        this.gameObject.GetComponent<SpriteRenderer>().sprite = this.tileSprite;
     }
 
     public void SimulationMode(){
@@ -51,10 +57,10 @@ public class Tile : MonoBehaviour
                 other.transform.SetParent(this.transform);
                 other.transform.GetComponent<AIDestinationSetter>().target = this.nearestExit.transform;
                 SetSpriteFromTileType(tileType.People);
-                this.gameObject.layer = 8;
+                //this.gameObject.layer = 8;
             } else if (this.tileType == tileType.Exit){
                 Destroy(other.gameObject);
-                Map.m.results.NrOfEscapes++;
+                Map.m.results.nrOfEscapes++;
             }
         }
     }

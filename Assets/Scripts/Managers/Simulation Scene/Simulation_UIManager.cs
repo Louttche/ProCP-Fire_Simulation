@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,6 @@ public class Simulation_UIManager : MonoBehaviour
     private void Start() {
         nrOfPeople_Slider.minValue = nrOfPeoplePerTile;
         SharedInfo.si.TileSpriteSelected = SharedInfo.si.fireExSprite;
-        resultsPanel.SetActive(false);
 
         nrOfPeople_Slider.interactable = false;
         StopButton.gameObject.SetActive(false);
@@ -36,7 +36,7 @@ public class Simulation_UIManager : MonoBehaviour
         //update the label to show the amount of people selected in the slider
         nrOfPeople_Text.text = nrOfPeople_Slider.value.ToString();
         if ((Map.m.currentTiles.Count > 0) && (statusDisplay.activeSelf))
-            nrOfEscapes_Text_Runtime.text = Map.m.results.NrOfEscapes.ToString();
+            nrOfEscapes_Text_Runtime.text = Map.m.results.nrOfEscapes.ToString();
 
         //Map the maximum amount of people allowed to spawn based on the amount of empty tiles on the map
         MapPeopleToEmptyTiles();
@@ -66,9 +66,11 @@ public class Simulation_UIManager : MonoBehaviour
                 ResumeButton.gameObject.SetActive(false);
                 
                 if (!resultsPanel.activeSelf){
+                    StartButton.interactable = true;
                     LoadButton.interactable = true;
                 } else{
                     StartButton.interactable = false;
+                    LoadButton.interactable = false;
                 }
 
                 infoDisplay.SetActive(true);
@@ -102,7 +104,7 @@ public class Simulation_UIManager : MonoBehaviour
                 foreach (Transform child in statusDisplay.transform)
                 {
                     if (child.name == "info")
-                        child.GetComponent<TMPro.TextMeshProUGUI>().text = Map.m.results.NrOfEscapes.ToString();
+                        child.GetComponent<TMPro.TextMeshProUGUI>().text = Map.m.results.nrOfEscapes.ToString();
                 }
                 break;
             case SimState.PAUSED:
@@ -123,6 +125,14 @@ public class Simulation_UIManager : MonoBehaviour
                 simulation_Manager.SetState(SimState.IDLE);
                 break;
         }
+    }
+
+    public void ShowResults()
+    {
+        resultsPanel.SetActive(true);
+        nrOfEscapes_Text.text = Map.m.results.nrOfEscapes.ToString();
+        nrOfDeaths_Text.text = Map.m.results.nrOfDeaths.ToString();
+        nrOfInjuries_Text.text = Map.m.results.nrOfInjuries.ToString();
     }
 
     public void RoundSliderValue(){

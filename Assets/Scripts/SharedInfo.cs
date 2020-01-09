@@ -32,31 +32,24 @@ public class SharedInfo : MonoBehaviour
         LoadSprites();
     }
 
-    void Update()
-    {
+    private void Update(){
         if ((createNewMap) && (Map.m != null)){
             CallNewMapMethod();
-        } else if (!createNewMap)
-            UpdateCurrentMap();
-    }
-
-    private void LogResults(){
-        if (currentMap != null){
-            foreach (Results r in currentMap.ListOfResults)
-            {
-                Debug.Log($"\nID: {r.Result_ID}\n People Survived: {r.NrOfEscapes}");
-            }
         }
+        
+        if (currentMap != null)
+            Debug.Log($"current map: {currentMap.fileName}");
+        
+        //if (Map.m == null)
+          //  currentMap = null;
     }
 
     public void UpdateCurrentMap()
     {
-        if (currentMap != null){
-            //Update the list of results for the current map
-            if (Map.m.currentTiles.Count > 0){
-                currentMap = new SaveObject();
-                LogResults();
-            }
+        if (Map.m != null){
+            currentMap = new SaveObject(true); //Calling the constructor of 'SaveObject' saves the information from the currently displayed grid
+        } else {
+            currentMap = null;
         }
     }
 

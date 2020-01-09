@@ -20,6 +20,7 @@ public static class OpenFile //: MonoBehaviour //EditorWindow
             string path = GetPath(sfbw.OpenFilePanel("Open file", SaveSystem.SAVE_FOLDER, extensions, false));
             if (path.Length != 0)
             {
+                SaveSystem.currentMapFileName = Path.GetFileName(path);
                 return path;
             }  
         }
@@ -37,7 +38,6 @@ public static class OpenFile //: MonoBehaviour //EditorWindow
         
         //string path = EditorUtility.SaveFilePanel("Save Map", SaveSystem.SAVE_FOLDER, "Floor_X", "json");
         string path = sfbw.SaveFilePanel("Save Map", SaveSystem.SAVE_FOLDER, "Floor_x", extensions);
-
         if (path.Length != 0)
         {
             return path;

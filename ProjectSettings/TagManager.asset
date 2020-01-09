@@ -7,6 +7,9 @@ TagManager:
   - Item
   - tile
   - Person
+  - Value
+  - UI Manager
+  - Manager
   layers:
   - Default
   - TransparentFX

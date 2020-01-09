@@ -9,10 +9,10 @@ public class Map : MonoBehaviour {
     public static Map m;
 
     //Map standard information
-    public int _rows;
-    public int _cols;
-    public float budget;
-    public float totalCost;
+    public int _rows = 0;
+    public int _cols = 0;
+    public float budget = 0;
+    public float totalCost = 0;
     public Results results;
     public List<Results> listOfResults = new List<Results>();
     public Vector2 gridSize;
@@ -32,6 +32,7 @@ public class Map : MonoBehaviour {
 
     [HideInInspector]
     public List<Tile> currentTiles = new List<Tile>();
+    public string fileName;
 
     private void Awake() {
         m = this;
@@ -43,12 +44,8 @@ public class Map : MonoBehaviour {
         OriginalSpriteSize = SharedInfo.si.emptySprite.bounds.size;
     }
 
-    public void SaveCurrentResults(){
-        listOfResults.Add(this.results);
-        
-        //Save the changes of the current map to the file
-        string json = JsonUtility.ToJson(SharedInfo.si.currentMap);
-        SaveSystem.Save(json);
+    private void Update() {
+        this.results.totalScore = this.results.GetTotalScore();
     }
 
     public void NewMap(int row, int col)
@@ -106,15 +103,15 @@ public class Map : MonoBehaviour {
                 currentTiles.Add(tileScript);
             }
         }
+        SharedInfo.si.UpdateCurrentMap();
     }
 
-    public void LoadMap(SaveObject loadedMap){
+    public void LoadMap(SaveObject loadedMap, bool updateMap){
         this._rows = loadedMap.Rows;
         this._cols = loadedMap.Cols;
         this.budget = loadedMap.Budget;
-        //if (loadedMap.ListOfResults != null)
-         //   this.listOfResults = loadedMap.ListOfResults;
-        //this.results = new Results();
+        this.listOfResults = loadedMap.ListOfResults;
+        this.fileName = loadedMap.fileName;
 
         if (currentTiles != null)
             currentTiles.Clear();
@@ -127,6 +124,9 @@ public class Map : MonoBehaviour {
 
         //Set the proper size of the tiles and the grid
         SetTilesize_Gridsize();
+
+        //Testing stuff below
+        int tileNumber = 1;
 
         for (int row = 0; row < this._rows; row++)
         {
@@ -145,7 +145,7 @@ public class Map : MonoBehaviour {
                 //set the proper data from the loaded tiles to the newly instantiated tile object
                 foreach (var tile in loadedMap.SavedTiles)
                 {
-                    if (tile.tilePosition == pos){
+                    if (tile.tileID == tileNumber){//if (tile.tilePosition == pos){
                         cO.name = tile.tileID.ToString();
                         Tile tileScript = cO.GetComponent<Tile>();
 
@@ -164,8 +164,11 @@ public class Map : MonoBehaviour {
                 //Make the tiles clickable and set the proper tag
                 originalTileSize = cO.GetComponent<BoxCollider2D>().size;
                 cO.tag = "tile";
+                tileNumber++;
             }
         }
+        if (updateMap)
+            SharedInfo.si.UpdateCurrentMap();
     }
 
     public void UpdateCurrentTilesList(){
@@ -245,11 +248,5 @@ public class Map : MonoBehaviour {
             }
             tileID = 1;
         }
-    }
-
-    public void SetResults(int nrOfDeaths, int nrOfInjuries, int nrOfEscapes){
-        this.results.NrOfEscapes = nrOfEscapes;
-        this.results.NrOfDeaths = nrOfDeaths;
-        this.results.NrOfInjuries = nrOfInjuries;
     }
 }

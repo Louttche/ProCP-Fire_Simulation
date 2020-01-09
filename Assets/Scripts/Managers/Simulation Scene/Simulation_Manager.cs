@@ -13,18 +13,17 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
     public GameObject personPrefab;
 
     //public static float secondsPerTick = 1f;
-    
+    public List<Tile> fireExtTiles = new List<Tile>();
     public List<Tile> currentEmptyTiles = new List<Tile>();
     public static List<Tile> listOfExits = new List<Tile>();
-    public float nrOfPeople;
-    public static int nrOfEscapes;
+
 
     private void Awake() {
-        pathFinder.SetActive(false);
         if (SharedInfo.si == null){
             GoToMainScene();
         }
     }
+    
     private void Start() {
         personPrefab.GetComponentInChildren<SpriteRenderer>().sortingLayerName = "Foreground";
     }
@@ -46,10 +45,11 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
                 SaveObject so = JsonUtility.FromJson<SaveObject>(saveString);
                 //Instantiate the tiles
                 if (so != null){
-                    Map.m.LoadMap(so);
+                    Map.m.LoadMap(so, true);
                     ClearEmptyTiles();
                     AddEmptyTiles();
                     SetState(SimState.READYTOSTART);
+                    //Set the map's file name Map.m.mapFileName = 
                 }
             } else
                 Debug.Log("Could not load!");
@@ -57,7 +57,6 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         catch (System.Exception)
         {
             Debug.Log("Could not load!");
-            throw;
         }
     }
 
@@ -65,6 +64,7 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         this.simulationState = state;
     }
     public void ScanObstacles(){
+        Debug.Log("Scanning obstacles...");
         pathFinder.GetComponent<AstarPath>().Scan();
     }
     
@@ -88,15 +88,29 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         }
         Map.m.UpdateCurrentTilesList();
     }
+    
     public void StartSimulation(){ //Called when 'Start' button is pressed
         SetState(SimState.RUNNING);
-        if (pathFinder.activeSelf){
+        //if (pathFinder.activeSelf){
             ScanObstacles();
-        } else
-            pathFinder.SetActive(true);
+        //} else{
+        //    pathFinder.SetActive(true);
+       // }
         Map.m.results = new Results();
         UpdateExitList();
+        UpdateFireExtList();
         SetPeople();
+    }
+
+    private void UpdateFireExtList()
+    {
+        fireExtTiles.Clear();
+        foreach (Tile tile in Map.m.currentTiles)
+        {
+            if (tile.hasFireExt){
+                fireExtTiles.Add(tile);
+            }
+        }
     }
 
     public void StopSimulation(){ //Called when 'Stop' button is pressed
@@ -108,12 +122,31 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         GameObject[] people = GameObject.FindGameObjectsWithTag("Person");
         if (people.Length == 0){
             StopSimulation();
-            uiManager.resultsPanel.SetActive(true);
-            uiManager.nrOfEscapes_Text.text = Map.m.results.NrOfEscapes.ToString();
-            uiManager.nrOfDeaths_Text.text = Map.m.results.NrOfDeaths.ToString();
-            uiManager.nrOfInjuries_Text.text = Map.m.results.NrOfInjuries.ToString();
+            uiManager.ShowResults();
         }
     }
+
+    public void SaveCurrentResults(){ //Called by the 'save results' button
+        Map.m.results.totalScore = Map.m.results.GetTotalScore();
+        Map.m.listOfResults.Add(Map.m.results);
+        SharedInfo.si.UpdateCurrentMap();
+        //Save the changes of the current map to the file
+        try
+        {
+            //Object to be saved as json
+            if (Map.m != null){
+                string json = JsonUtility.ToJson(SharedInfo.si.currentMap);
+                //SaveSystem.SaveResult(json);
+                SaveSystem.SaveResult(json);
+            }
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Could not save!");
+            throw;
+        }
+    }
+
     private void UpdateExitList()
     {
         listOfExits.Clear();
@@ -124,7 +157,6 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
             }
         }
     }
-
 
     public void ResetPeople(){
         GameObject[] people = GameObject.FindGameObjectsWithTag("Person");
