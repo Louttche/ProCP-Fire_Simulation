@@ -16,6 +16,7 @@ public class Tile : MonoBehaviour
     //private bool enteredNewTile = false;
     public bool isOuterWall = false;
     public Tile nearestExit;
+    public List<Tile> surroundTiles = new List<Tile>();
 
     private void Start() {
         initialTileSprite = this.tileSprite;
@@ -62,6 +63,13 @@ public class Tile : MonoBehaviour
                 Destroy(other.gameObject);
                 Map.m.results.nrOfEscapes++;
             }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other) {
+        Debug.Log("hello");
+        if ((other.CompareTag("tile") && (!surroundTiles.Contains(other.GetComponent<Tile>())))){
+            surroundTiles.Add(other.GetComponent<Tile>());
         }
     }
 
