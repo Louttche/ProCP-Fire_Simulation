@@ -48,10 +48,11 @@ public class Map : MonoBehaviour {
         this.results.totalScore = this.results.GetTotalScore();
     }
 
-    public void NewMap(int row, int col)
+    public void NewMap(int row, int col, float budget)
     {
         this._rows = row;
         this._cols = col;
+        this.budget = budget;
         listOfResults.Clear();
         //Destroy previous tile objects to make a new one
         DestroyCurrentMap();
@@ -173,13 +174,13 @@ public class Map : MonoBehaviour {
 
     public void UpdateCurrentTilesList(){
         currentTiles.Clear();
-        foreach(Transform tile in transform)
+        foreach(Transform tile in this.transform)
         {
             Tile tileScript = tile.GetComponent<Tile>();
 
             if (tileScript != null){
                 SetCollider(tileScript);
-                this.currentTiles.Add(tileScript); 
+                this.currentTiles.Add(tileScript);
             }
         }
     }
@@ -192,15 +193,16 @@ public class Map : MonoBehaviour {
                 case tileType.People:
                     tile.GetComponent<BoxCollider2D>().size = originalTileSize;
                     break;
-                case tileType.FireEx:
-                    tile.GetComponent<BoxCollider2D>().size = originalTileSize * 3;
-                    break;
                 case tileType.Fire:
-                    tile.GetComponent<BoxCollider2D>().size = originalTileSize * 4;
+                    tile.GetComponent<BoxCollider2D>().size = originalTileSize * 3;
                     break;
                 default:
                     tile.GetComponent<BoxCollider2D>().size = originalTileSize;
                     break;
+            }
+
+            if (tile.hasFireExt){
+                tile.GetComponent<BoxCollider2D>().size = originalTileSize * 2.5f;
             }
         } else {
             tile.gameObject.AddComponent<BoxCollider2D>();
@@ -248,5 +250,14 @@ public class Map : MonoBehaviour {
             }
             tileID = 1;
         }
+    }
+
+    public Tile GetTileByID(int id){
+        foreach (Tile tile in this.currentTiles)
+        {
+            if (tile.tileID == id)
+                return tile;
+        }
+        return null;
     }
 }

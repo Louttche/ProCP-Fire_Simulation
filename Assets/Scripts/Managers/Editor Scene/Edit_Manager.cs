@@ -56,7 +56,7 @@ public class Edit_Manager : MonoBehaviour, ISceneChange
         SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
     }
 
-    public void GoToEditorScene(bool newMap)
+    public void GoToEditorScene()
     {
         throw new System.NotImplementedException();
     }

@@ -8,15 +8,20 @@ using System;
 public class Simulation_Manager : MonoBehaviour, ISceneChange
 {
     public Simulation_UIManager uiManager;
-    public SimState simulationState;
+    
     public GameObject pathFinder;
     public GameObject personPrefab;
 
     //public static float secondsPerTick = 1f;
-    public List<Tile> fireExtTiles = new List<Tile>();
     public List<Tile> currentEmptyTiles = new List<Tile>();
-    public static List<Tile> listOfExits = new List<Tile>();
 
+    //Static variables
+    public static int fireExtMaxCapacity = 10, fireDamage = 1, fireHealth = 5;
+    public static List<Tile> listOfExits = new List<Tile>();
+    public static List<Tile> listOfFireTiles = new List<Tile>();
+    public static List<Tile> listofFireExtTiles = new List<Tile>();
+    public static List<Person> listofPeople = new List<Person>();
+    public static SimState simulationState;
 
     private void Awake() {
         if (SharedInfo.si == null){
@@ -28,12 +33,17 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         personPrefab.GetComponentInChildren<SpriteRenderer>().sortingLayerName = "Foreground";
     }
     private void Update() {
-        if ((Input.GetMouseButtonDown(0)) && (simulationState == SimState.READYTOSTART)){
+        if ((Input.GetMouseButtonDown(0)) && (simulationState == SimState.READYTOSTART) && (uiManager.resultsPanel.activeSelf == false)){
             SetFireExt();
         }
 
-        if (this.simulationState == SimState.RUNNING)
+        if (simulationState == SimState.RUNNING){
             CheckIfSimulationIsDone();
+            //UpdateFireTileList();
+            //UpdateFireExtList();
+        }
+
+        Debug.Log($"{simulationState}");
     }
 
     public void Load(){
@@ -61,7 +71,7 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
     }
 
     public void SetState(SimState state){
-        this.simulationState = state;
+        simulationState = state;
     }
     public void ScanObstacles(){
         Debug.Log("Scanning obstacles...");
@@ -70,19 +80,21 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
     
     public void SetPeople(){
         bool done = false;
-        int i = 0;
+        int nrOfPeopleSpawned = 0;
         while (!done){
             int randomEmptyTile = UnityEngine.Random.Range(0, currentEmptyTiles.Count);
             Tile currentRandomTile = currentEmptyTiles[randomEmptyTile];
 
             if (currentRandomTile.tileType != tileType.People){
-                Instantiate(personPrefab, currentRandomTile.tilePosition, Quaternion.identity, currentRandomTile.transform);
+                GameObject person = Instantiate(personPrefab, currentRandomTile.tilePosition, Quaternion.identity, currentRandomTile.transform);
+                listofPeople.Add(person.GetComponent<Person>());
                 currentRandomTile.SetSpriteFromTileType(tileType.People);
-                currentRandomTile.SetTileTypeFromCurrentSprite();
-                i++;
+                //currentRandomTile.SetTileTypeFromCurrentSprite();
+                nrOfPeopleSpawned++;
             }
             
-            if (i >= uiManager.nrOfPeople_Slider.value){
+            if (nrOfPeopleSpawned >= uiManager.nrOfPeople_Slider.value){
+                Map.m.results.nrOfPeople = nrOfPeopleSpawned;
                 done = true;
             }
         }
@@ -91,12 +103,11 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
     
     public void StartSimulation(){ //Called when 'Start' button is pressed
         SetState(SimState.RUNNING);
-        //if (pathFinder.activeSelf){
-            ScanObstacles();
-        //} else{
-        //    pathFinder.SetActive(true);
-       // }
+        ScanObstacles();
         Map.m.results = new Results();
+        
+        //Set fire
+        UpdateFireTileList();
         UpdateExitList();
         UpdateFireExtList();
         SetPeople();
@@ -104,17 +115,20 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
 
     private void UpdateFireExtList()
     {
-        fireExtTiles.Clear();
+        listofFireExtTiles.Clear();
         foreach (Tile tile in Map.m.currentTiles)
         {
             if (tile.hasFireExt){
-                fireExtTiles.Add(tile);
+                listofFireExtTiles.Add(tile);
             }
         }
     }
 
     public void StopSimulation(){ //Called when 'Stop' button is pressed
-        SetState(SimState.IDLE);
+        if (Map.m.currentTiles.Count > 0)
+            SetState(SimState.READYTOSTART);
+        else
+            SetState(SimState.IDLE);
         ResetPeople();
     }
 
@@ -154,6 +168,17 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         {
             if (tile.tileType == tileType.Exit){
                 listOfExits.Add(tile);
+            }
+        }
+    }
+
+    private void UpdateFireTileList()
+    {
+        listOfFireTiles.Clear();
+        foreach (Tile tile in Map.m.currentTiles)
+        {
+            if (tile.tileType == tileType.Fire){
+                listOfFireTiles.Add(tile);
             }
         }
     }
@@ -199,7 +224,7 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
             currentEmptyTiles.Clear();
     }
 
-    public void GoToEditorScene(bool newMap)
+    public void GoToEditorScene()
     {
         SceneManager.LoadScene("Editor Scene", LoadSceneMode.Single);
     }
