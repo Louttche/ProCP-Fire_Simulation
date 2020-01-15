@@ -44,16 +44,15 @@ public class SaveObject
             }
             return avgTotalScore / this.ListOfResults.Count;
         } else
-            return avgTotalScore;
+            return Mathf.Round(avgTotalScore);
     }
 
     public float GetAverageSurvivalPercentage(){
         float avgEscapes = 0;
         foreach (var r in this.ListOfResults)
         {
-            avgEscapes += r.nrOfEscapes;
+            avgEscapes += (r.nrOfEscapes * 100) / r.nrOfPeople;
         }
-
         return Mathf.Round(avgEscapes / this.ListOfResults.Count);
     }
 
@@ -61,19 +60,19 @@ public class SaveObject
         float avgDeaths = 0;
         foreach (var r in this.ListOfResults)
         {
-            avgDeaths += r.nrOfDeaths;
+            avgDeaths += (r.nrOfDeaths * 100) / r.nrOfPeople;
         }
 
-        return avgDeaths / this.ListOfResults.Count;
+        return Mathf.Round(avgDeaths / this.ListOfResults.Count);
     }
 
     public float GetAverageInjuryPercentage(){
         float avgInjuries = 0;
         foreach (var r in this.ListOfResults)
         {
-            avgInjuries += r.nrOfInjuries;
+            avgInjuries += (r.nrOfInjuries * 100) / r.nrOfPeople;
         }
 
-        return avgInjuries / this.ListOfResults.Count;
+        return Mathf.Round(avgInjuries / this.ListOfResults.Count);
     }    
 }

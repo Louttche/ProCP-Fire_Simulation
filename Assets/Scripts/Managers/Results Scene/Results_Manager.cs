@@ -22,17 +22,20 @@ public class Results_Manager : MonoBehaviour, ISceneChange
         {
             Debug.Log($"{item.fileName} has {item.ListOfResults.Count} results.");    
         }
-
-        results_UIManager.ShowResults();
     }
 
     public void AddMap(SaveObject map){
+        //Show preview of selected map before testing to add to list
+        Map.m.LoadMap(map, true);
+
+
         if (selectedMaps.Count == 4){
             Debug.Log("Maximum amount of maps selected, please remove a map before adding another one.");
         } else {
             if (Contains(selectedMaps, map.fileName) == false){
                 //Debug.Log($"Adding {map.fileName} with {map.ListOfResults.Count} results");
                 selectedMaps.Add(map);
+                results_UIManager.ShowResults();
             }
             else
                 Debug.Log("Map already exists in list");
@@ -61,11 +64,23 @@ public class Results_Manager : MonoBehaviour, ISceneChange
         }
         catch (System.Exception)
         {
-            Debug.Log("Could not select this map.");
+            Debug.Log("Could not retrieve this map.");
             throw;
         }
     }
 
+    public void DeleteResult(Results result){
+        SaveObject map = GetMap(results_UIManager.seeMorePanel.transform.Find("Floor Name").GetComponent<TMPro.TextMeshProUGUI>().text);
+        Debug.Log(map.fileName);
+        foreach (Results r in map.ListOfResults)
+        {
+            if (r == result)
+                map.ListOfResults.Remove(r);    
+        }
+
+        results_UIManager.GetAndShowResultList(map);
+        results_UIManager.deleteResult.interactable = false;
+    }
 
     private bool Contains(List<SaveObject> maps, string name){
         foreach (SaveObject m in maps)
@@ -94,9 +109,9 @@ public class Results_Manager : MonoBehaviour, ISceneChange
 
                 //instantiate the item in the scroll view
                 float spawnY = i * results_UIManager.itemHeight;
-                Vector2 pos = new Vector2(results_UIManager.spawnPoint.transform.position.x, results_UIManager.spawnPoint.transform.position.y + (-spawnY));
-                GameObject li = Instantiate(results_UIManager.planListItem, pos, Quaternion.identity);
-                li.transform.SetParent(results_UIManager.spawnPoint.transform);
+                Vector2 pos = new Vector2(results_UIManager.fileSpawn.transform.position.x, results_UIManager.fileSpawn.transform.position.y + (-spawnY));
+                GameObject li = Instantiate(results_UIManager.listItem, pos, Quaternion.identity);
+                li.transform.SetParent(results_UIManager.fileSpawn.transform);
                 li.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = fileName;
                 listOfFiles.Add(li);
                 i++;
@@ -105,7 +120,7 @@ public class Results_Manager : MonoBehaviour, ISceneChange
         }
     }
 
-    public void GoToEditorScene(bool newMap)
+    public void GoToEditorScene()
     {
         SceneManager.LoadScene("Editor Scene", LoadSceneMode.Single);
     }

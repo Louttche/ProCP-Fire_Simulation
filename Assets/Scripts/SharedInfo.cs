@@ -13,9 +13,6 @@ public class SharedInfo : MonoBehaviour
     [HideInInspector]
     public Sprite TileSpriteSelected;
     public SaveObject currentMap;
-    public int rows, cols;
-    public float budget;
-    public bool createNewMap = false;
 
     //Resources
     [HideInInspector]
@@ -32,11 +29,7 @@ public class SharedInfo : MonoBehaviour
         LoadSprites();
     }
 
-    private void Update(){
-        if ((createNewMap) && (Map.m != null)){
-            CallNewMapMethod();
-        }
-        
+    private void Update(){        
         if (currentMap != null)
             Debug.Log($"current map: {currentMap.fileName}");
         
@@ -61,13 +54,5 @@ public class SharedInfo : MonoBehaviour
             fireSprite = Resources.Load<Sprite>("Sprites/Other/Fire");
             peopleSprite = Resources.Load<Sprite>("Sprites/Other/People");
             spritesLoaded = true;
-    }
-    private void CallNewMapMethod(){
-        Scene s = SceneManager.GetActiveScene();
-        if ((this.rows != 0) && (this.cols != 0) && (s.name == "Editor Scene")){
-            Map.m.budget = this.budget;
-            Map.m.NewMap(this.rows, this.cols);
-            createNewMap = false;
-        }
     }
 }

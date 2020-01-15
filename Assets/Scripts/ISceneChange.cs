@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public interface ISceneChange
 {
     void GoToMainScene();
-    void GoToEditorScene(bool newMap);
+    void GoToEditorScene();
     void GoToSimulationScene();
     void GoToResultsScene();
 

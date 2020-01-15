@@ -12,20 +12,20 @@ public class Main_Manager : MonoBehaviour, ISceneChange
     }
 
     // ISceneChange Methods
-    public void GoToEditorScene(bool newMap)
+    public void GoToEditorScene()
     {
         try
         {
-            if (newMap){
-                if ((uiManager.rows.text != null) && (uiManager.cols.text != null)){
-                    SharedInfo.si.rows = int.Parse(uiManager.rows.text);
-                    SharedInfo.si.cols = int.Parse(uiManager.cols.text);
-                    SharedInfo.si.budget = int.Parse(uiManager.budget.text);
-                    SharedInfo.si.createNewMap = true;
-                }
-            } else{
-                SharedInfo.si.createNewMap = false;
-            }
+            // if (newMap){
+            //     if ((uiManager.rows.text != null) && (uiManager.cols.text != null)){
+            //         SharedInfo.si.rows = int.Parse(uiManager.rows.text);
+            //         SharedInfo.si.cols = int.Parse(uiManager.cols.text);
+            //         SharedInfo.si.budget = int.Parse(uiManager.budget.text);
+            //         SharedInfo.si.createNewMap = true;
+            //     }
+            // } else{
+            //     SharedInfo.si.createNewMap = false;
+            // }
 
             SceneManager.LoadScene("Editor Scene", LoadSceneMode.Single);
         }

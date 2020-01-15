@@ -15,12 +15,12 @@ public class Tile : MonoBehaviour
     public bool hasFireExt = false;
     //private bool enteredNewTile = false;
     public bool isOuterWall = false;
-    public Tile nearestExit;
     public List<Tile> surroundTiles = new List<Tile>();
 
     private void Start() {
         initialTileSprite = this.tileSprite;
     }
+
     private void Update() {
         Scene activeScene = SceneManager.GetActiveScene();
         if (activeScene.name == "Editor Scene"){
@@ -40,10 +40,12 @@ public class Tile : MonoBehaviour
         if (!hasFireExt){
             this.tileSprite = initialTileSprite;
             SetTileTypeFromCurrentSprite();
-            SetNearestExit();
         } else
             this.tileSprite = SharedInfo.si.fireExSprite;
         this.gameObject.GetComponent<SpriteRenderer>().sprite = this.tileSprite;
+
+        if (Simulation_Manager.simulationState == SimState.READYTOSTART)
+            SetSurroundingTiles();
     }
 
     public void EditMode(){
@@ -56,37 +58,11 @@ public class Tile : MonoBehaviour
         if (other.CompareTag("Person")){
             if (this.tileType == tileType.Empty){
                 other.transform.SetParent(this.transform);
-                other.transform.GetComponent<AIDestinationSetter>().target = this.nearestExit.transform;
                 SetSpriteFromTileType(tileType.People);
-                //this.gameObject.layer = 8;
             } else if (this.tileType == tileType.Exit){
                 Destroy(other.gameObject);
                 Map.m.results.nrOfEscapes++;
             }
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D other) {
-        Debug.Log("hello");
-        if ((other.CompareTag("tile") && (!surroundTiles.Contains(other.GetComponent<Tile>())))){
-            surroundTiles.Add(other.GetComponent<Tile>());
-        }
-    }
-
-    public void SetNearestExit()
-    {
-        float distance = 0, minDistance = 100;
-        foreach (Tile exit in Simulation_Manager.listOfExits)
-        {
-            float distance_x = this.tilePosition.x - exit.tilePosition.x;
-            float distance_y = this.tilePosition.y - exit.tilePosition.y;
-            distance = Mathf.Abs(distance_x) + Mathf.Abs(distance_y);
-
-            if (distance < minDistance){
-                minDistance = distance;
-                this.nearestExit = exit;
-            }
-            //Debug.Log($"Calculated nearest exit for tile-{this.tileID}\nNearest exit is tile-{exit.tileID}");
         }
     }
 
@@ -98,6 +74,43 @@ public class Tile : MonoBehaviour
     }
     public void SetCost(float cost){
         this.cost = cost;
+    }
+
+    public void SetSurroundingTiles(){
+        try
+        {
+            Tile northTile, southTile, eastTile, westTile;
+        
+            eastTile = Map.m.GetTileByID(this.tileID + 1);
+            if (eastTile.tilePosition.y != this.tilePosition.y)
+                eastTile = null;
+            else{
+                if (!this.surroundTiles.Contains(eastTile))
+                    this.surroundTiles.Add(eastTile);
+            }
+            
+            westTile = Map.m.GetTileByID(this.tileID - 1);
+            if (westTile.tilePosition.y != this.tilePosition.y)
+                westTile = null;
+            else{
+                if (!this.surroundTiles.Contains(westTile))
+                    this.surroundTiles.Add(westTile);
+            }
+
+            northTile = Map.m.GetTileByID(this.tileID + Map.m._cols);
+            if ((northTile != null) && (!this.surroundTiles.Contains(northTile))){
+                this.surroundTiles.Add(northTile);
+            }
+
+            southTile = Map.m.GetTileByID(this.tileID - Map.m._cols);
+            if ((northTile != null) && (!this.surroundTiles.Contains(southTile))){
+                this.surroundTiles.Add(southTile);
+            }
+        }
+        catch (System.Exception)
+        {
+            return;
+        }
     }
 
     public void SetTileTypeFromCurrentSprite(){
@@ -148,7 +161,7 @@ public class Tile : MonoBehaviour
                     this.tileSprite = SharedInfo.si.exitSprite;
                     break;
                 case tileType.FireEx:
-                    this.gameObject.layer = 9; //9th layer is set to 'interactable'
+                    this.gameObject.layer = 9; //9th layer is set to 'Interactable'
                     this.tileSprite = SharedInfo.si.fireExSprite;
                     break;
                 case tileType.Fire:
@@ -164,6 +177,7 @@ public class Tile : MonoBehaviour
                     this.tileSprite = SharedInfo.si.wallSprite;
                     break;
                 case tileType.People:
+                    this.gameObject.layer = 8;
                     this.tileSprite = SharedInfo.si.peopleSprite;
                     break;
                 default:

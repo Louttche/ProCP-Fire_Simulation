@@ -18,12 +18,15 @@ public class Results
     private static int injuryPoints = -2;
     private static int escapePoints = 5;
 
-    //private int result_ID;
+    //General Info
     public int nrOfDeaths;
     public int nrOfInjuries;
     public int nrOfEscapes;
     public int totalScore;
+
+    //Control Variable Info
     public int nrOfPeople;
+    public int nrOfFireExtinguishers;
 
     public Results(){
         this.nrOfDeaths = 0;

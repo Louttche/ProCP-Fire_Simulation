@@ -57,74 +57,71 @@ public class Simulation_UIManager : MonoBehaviour
     public void ToggleUI(){
         if (simulation_Manager.currentEmptyTiles.Count > 0)
             nrOfPeople_Slider.interactable = true;
-        switch (this.simulation_Manager.simulationState)
-        {
-            case SimState.IDLE:
-                StopButton.gameObject.SetActive(false);
-                StartButton.gameObject.SetActive(true);
-                PauseButton.gameObject.SetActive(false);
-                ResumeButton.gameObject.SetActive(false);
-                
-                if (!resultsPanel.activeSelf){
+            switch (Simulation_Manager.simulationState)
+            {
+                case SimState.IDLE:
+                    StopButton.gameObject.SetActive(false);
+                    StartButton.gameObject.SetActive(true);
+                    PauseButton.gameObject.SetActive(false);
+                    ResumeButton.gameObject.SetActive(false);
+                    
+                    if (!resultsPanel.activeSelf){
+                        StartButton.interactable = true;
+                        LoadButton.interactable = true;
+                    } else{
+                        StartButton.interactable = false;
+                        LoadButton.interactable = false;
+                    }
+
+                    infoDisplay.SetActive(true);
+                    statusDisplay.SetActive(false);
+                    break;
+                case SimState.READYTOSTART:
+                    StartButton.gameObject.SetActive(!this.resultsPanel.activeSelf);
+                    PauseButton.gameObject.SetActive(false);
+                    ResumeButton.gameObject.SetActive(false);
+                    StopButton.gameObject.SetActive(false);
+
                     StartButton.interactable = true;
                     LoadButton.interactable = true;
-                } else{
-                    StartButton.interactable = false;
+
+                    infoDisplay.SetActive(true);
+                    statusDisplay.SetActive(false);
+                    break;
+                case SimState.RUNNING:
+                    Time.timeScale = 1;
+
+                    StartButton.gameObject.SetActive(false);
+                    PauseButton.gameObject.SetActive(true);
+                    ResumeButton.gameObject.SetActive(false);
+                    StopButton.gameObject.SetActive(false);
+
+                    nrOfPeople_Slider.interactable = false;
                     LoadButton.interactable = false;
-                }
 
-                infoDisplay.SetActive(true);
-                statusDisplay.SetActive(false);
-                break;
-            case SimState.READYTOSTART:
-                StartButton.gameObject.SetActive(true);
-                PauseButton.gameObject.SetActive(false);
-                ResumeButton.gameObject.SetActive(false);
-                StopButton.gameObject.SetActive(false);
+                    infoDisplay.SetActive(false);
+                    statusDisplay.SetActive(true);
+                    foreach (Transform child in statusDisplay.transform)
+                    {
+                        if (child.name == "info")
+                            child.GetComponent<TMPro.TextMeshProUGUI>().text = Map.m.results.nrOfEscapes.ToString();
+                    }
+                    break;
+                case SimState.PAUSED:
+                    Time.timeScale = 0;
 
-                StartButton.interactable = true;
-                LoadButton.interactable = true;
+                    StartButton.gameObject.SetActive(false);
+                    PauseButton.gameObject.SetActive(false);
+                    ResumeButton.gameObject.SetActive(true);
+                    StopButton.gameObject.SetActive(true);
 
-                infoDisplay.SetActive(true);
-                statusDisplay.SetActive(false);
-                break;
-            case SimState.RUNNING:
-                Time.timeScale = 1;
+                    nrOfPeople_Slider.interactable = false;
+                    LoadButton.interactable = false;
 
-                StartButton.gameObject.SetActive(false);
-                PauseButton.gameObject.SetActive(true);
-                ResumeButton.gameObject.SetActive(false);
-                StopButton.gameObject.SetActive(false);
-
-                nrOfPeople_Slider.interactable = false;
-                LoadButton.interactable = false;
-
-                infoDisplay.SetActive(false);
-                statusDisplay.SetActive(true);
-                foreach (Transform child in statusDisplay.transform)
-                {
-                    if (child.name == "info")
-                        child.GetComponent<TMPro.TextMeshProUGUI>().text = Map.m.results.nrOfEscapes.ToString();
-                }
-                break;
-            case SimState.PAUSED:
-                Time.timeScale = 0;
-
-                StartButton.gameObject.SetActive(false);
-                PauseButton.gameObject.SetActive(false);
-                ResumeButton.gameObject.SetActive(true);
-                StopButton.gameObject.SetActive(true);
-
-                nrOfPeople_Slider.interactable = false;
-                LoadButton.interactable = false;
-
-                infoDisplay.SetActive(false);
-                statusDisplay.SetActive(true);
-                break;
-            default:
-                simulation_Manager.SetState(SimState.IDLE);
-                break;
-        }
+                    infoDisplay.SetActive(false);
+                    statusDisplay.SetActive(true);
+                    break;
+            }
     }
 
     public void ShowResults()
