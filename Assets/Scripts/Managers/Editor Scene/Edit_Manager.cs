@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Edit_Manager : MonoBehaviour, ISceneChange
 {
-    public Edit_UIManager uIManager;
+    public Edit_UIManager Editor_uIManager;
 
     private void Awake() {
         if (SharedInfo.si == null){

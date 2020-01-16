@@ -52,7 +52,7 @@ public class Person : MonoBehaviour
                     break;
             }
         } else {
-            Debug.Log("no fire :D");
+            //Debug.Log("no fire :D Wonder around");
             this.GetComponent<AIDestinationSetter>().target = GetNearestExit().transform;
         }
     }
@@ -75,8 +75,8 @@ public class Person : MonoBehaviour
         }
 
         //If there are enough people looking to extinguish, then evacuate, otherwise extinguish
-        if (nrOfPeopleExtinguishing >= Simulation_Manager.listofFireExtTiles.Count)
-            this.GetComponent<AIDestinationSetter>().target = GetNearestExit().transform;
+        if ((nrOfPeopleExtinguishing >= Simulation_Manager.listofFireExtTiles.Count) && (GetNearestExit().transform != null))
+                this.GetComponent<AIDestinationSetter>().target = GetNearestExit().transform;
         else{
             this.action = Action.Extinguish;
         }
@@ -111,7 +111,7 @@ public class Person : MonoBehaviour
 
     private Tile GetNearestExit()
     {
-        float distance = 0, minDistance = 100;
+        float distance = 0, minDistance = 500; //minDistance is a calibrated number to fit the max distance in the grid
         Tile nearestExit = null;
 
         foreach (Tile exit in Simulation_Manager.listOfExits)

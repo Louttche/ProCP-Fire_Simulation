@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Edit_UIManager : MonoBehaviour
 {
-    public Edit_Manager edit_Manager;
+    public Edit_Manager Editor_Manager;
     public List<GameObject> BuildingTiles = new List<GameObject>();
     public TMPro.TextMeshProUGUI lbl_totalCost, lbl_budget;
     public Button btn_NewMap;
@@ -22,6 +22,21 @@ public class Edit_UIManager : MonoBehaviour
         foreach (GameObject b in BuildingTiles)
         {
             b.GetComponent<Button>().onClick.AddListener(() => SetTileSelected(b.GetComponent<Button>(), b.GetComponent<Image>().sprite));
+            switch (b.transform.Find("type").GetComponent<TMPro.TextMeshProUGUI>().text)
+            {
+                case "Wall":
+                    b.transform.Find("cost").GetComponent<TMPro.TextMeshProUGUI>().text = SharedInfo.wallCost.ToString();
+                    break;
+                case "Empty":
+                    b.transform.Find("cost").GetComponent<TMPro.TextMeshProUGUI>().text = SharedInfo.emptyTileCost.ToString();
+                    break;
+                case "Exit":
+                    b.transform.Find("cost").GetComponent<TMPro.TextMeshProUGUI>().text = SharedInfo.exitTileCost.ToString();
+                    break;
+                default:
+                    b.transform.Find("cost").GetComponent<TMPro.TextMeshProUGUI>().text = "N/A";
+                    break;
+            }
         }
         btn_confirm.onClick.AddListener(() => Map.m.NewMap(int.Parse(rows.text), int.Parse(cols.text), int.Parse(budget.text)));
     }
@@ -44,37 +59,42 @@ public class Edit_UIManager : MonoBehaviour
         }
     }
 
-    private void SetTileType(){
+    public void SetTileType(){
         GetMousePosition gmp = new GetMousePosition();
         GameObject currentTileObj = gmp.GetTargettedGO(Input.mousePosition);
 
         if (currentTileObj != null){
             if (currentTileObj.tag == "tile"){
-                tileType currentTileType = currentTileObj.GetComponent<Tile>().tileType;
+                Tile currentTile = currentTileObj.GetComponent<Tile>();
                 if (SharedInfo.si.TileSpriteSelected != null){
                     //Restrictions (eg. if the tile is an outer wall, only allow exit tiles to be placed)
-                    switch (currentTileType)
+                    switch (currentTile.tileType)
                     {
                         case tileType.Empty:
                             if (SharedInfo.si.TileSpriteSelected == SharedInfo.si.wallSprite)
-                                currentTileObj.GetComponent<Tile>().tileSprite = SharedInfo.si.TileSpriteSelected;
+                                currentTile.tileSprite = SharedInfo.si.TileSpriteSelected;
                             break;
                         case tileType.Wall:
-                            if (SharedInfo.si.TileSpriteSelected == SharedInfo.si.emptySprite)
-                                currentTileObj.GetComponent<Tile>().tileSprite = SharedInfo.si.TileSpriteSelected;
+                            if ((SharedInfo.si.TileSpriteSelected == SharedInfo.si.emptySprite) || (SharedInfo.si.TileSpriteSelected == SharedInfo.si.fireExSprite))
+                                if (currentTile.isCorner() == false)
+                                    currentTile.tileSprite = SharedInfo.si.TileSpriteSelected;
                             break;
                         case tileType.OuterWall:
                             if (SharedInfo.si.TileSpriteSelected == SharedInfo.si.exitSprite)
-                                currentTileObj.GetComponent<Tile>().tileSprite = SharedInfo.si.TileSpriteSelected;
+                                if (currentTile.isCorner() == false)
+                                    currentTile.tileSprite = SharedInfo.si.TileSpriteSelected;
                             break;
                         case tileType.Exit:
                             if (SharedInfo.si.TileSpriteSelected == SharedInfo.si.wallSprite){
-                                currentTileObj.GetComponent<Tile>().tileSprite = SharedInfo.si.TileSpriteSelected;
-                                currentTileObj.GetComponent<Tile>().isOuterWall = true;
+                                currentTile.tileSprite = SharedInfo.si.TileSpriteSelected;
+                                currentTile.isOuterWall = true;
                             }
                             break;
+                        case tileType.FireEx:
+                            currentTile.tileSprite = currentTile.initialTileSprite;
+                            break;
                         default:
-                            currentTileObj.GetComponent<Tile>().tileSprite = SharedInfo.si.TileSpriteSelected;
+                            currentTile.tileSprite = SharedInfo.si.TileSpriteSelected;
                             break;
                     }
                 }
@@ -83,11 +103,19 @@ public class Edit_UIManager : MonoBehaviour
     }
 
     public void UpdateTotalCost(){
-        Map.m.totalCost = 0;
-        foreach (var t in Map.m.currentTiles)
-        {
-            Map.m.totalCost += t.cost;
-            lbl_totalCost.text = Map.m.totalCost.ToString();
+        if (Map.m.currentTiles.Count > 0){
+            Map.m.totalCost = 0;
+
+            foreach (var t in Map.m.currentTiles)
+            {
+                Map.m.totalCost += t.cost;
+                lbl_totalCost.text = Map.m.totalCost.ToString();
+            }
+
+            if (Map.m.budget < Map.m.totalCost){
+                lbl_totalCost.color = Color.red;
+            } else
+                lbl_totalCost.color = Color.black;
         }
     }
 

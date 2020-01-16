@@ -43,6 +43,10 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
             //UpdateFireExtList();
         }
 
+        if (uiManager.resultsPanel.activeSelf == true){
+            SetState(SimState.IDLE);
+        }
+
         Debug.Log($"{simulationState}");
     }
 
@@ -129,6 +133,7 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
             SetState(SimState.READYTOSTART);
         else
             SetState(SimState.IDLE);
+
         ResetPeople();
     }
 
@@ -195,11 +200,12 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
     private void SetFireExt(){
         GetMousePosition gmp = new GetMousePosition();
         GameObject currentTileObj = gmp.GetTargettedGO(Input.mousePosition);
+        Tile currentTile = currentTileObj.GetComponent<Tile>();
 
         //Add/Remove fire extinguishers from the map, while keeping the original sprite of the tile through its type (type remains unchanged)
-        if (currentTileObj != null){
+        if ((currentTileObj != null) && (currentTile != null)){
             if (currentTileObj.tag == "tile"){
-                if ((!currentTileObj.GetComponent<Tile>().hasFireExt) && ((currentTileObj.GetComponent<Tile>().tileType == tileType.Wall) || (currentTileObj.GetComponent<Tile>().tileType == tileType.OuterWall))){
+                if ((!currentTile.hasFireExt) && ((currentTile.tileType == tileType.Wall) || (currentTile.tileType == tileType.OuterWall) && (currentTile.isCorner() == false))){
                     currentTileObj.GetComponent<Tile>().hasFireExt = true;
                 } else {
                     currentTileObj.GetComponent<Tile>().SetSpriteFromTileType(currentTileObj.GetComponent<Tile>().tileType);
@@ -207,6 +213,7 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
                 }
             }
         }
+        Map.m.UpdateCurrentTilesList();
     }
 
     public void AddEmptyTiles(){

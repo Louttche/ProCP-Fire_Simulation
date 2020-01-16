@@ -63,7 +63,7 @@ public class Results_UIManager : MonoBehaviour
                     switch (child.name)
                     {
                         case "Floor Name":
-                            child.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = results_Manager.selectedMaps[i].fileName;
+                            child.GetComponent<TMPro.TextMeshProUGUI>().text = results_Manager.selectedMaps[i].fileName;
                             break;
                         case "Survived":
                             FindTextOf(child).GetComponent<TMPro.TextMeshProUGUI>().text = results_Manager.selectedMaps[i].GetAverageSurvivalPercentage().ToString() + "%";
@@ -190,7 +190,7 @@ public class Results_UIManager : MonoBehaviour
     }
 
     private void DeactivateAllResultPanels(){
-        foreach (var panel in resultPanels)
+        foreach (GameObject panel in resultPanels)
         {
             panel.SetActive(false);
         }

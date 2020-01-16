@@ -18,7 +18,7 @@ public class Results_Manager : MonoBehaviour, ISceneChange
     }
 
     private void Update() {
-        foreach (var item in selectedMaps)
+        foreach (SaveObject item in selectedMaps)
         {
             Debug.Log($"{item.fileName} has {item.ListOfResults.Count} results.");    
         }
@@ -107,6 +107,9 @@ public class Results_Manager : MonoBehaviour, ISceneChange
                 string[] splitArray =  file.Split(char.Parse("/"));
                 string fileName = splitArray[splitArray.Length - 1];
 
+                if ((fileName.EndsWith("meta")) || (GetMap(fileName).ListOfResults.Count <= 0))
+                    continue;
+                
                 //instantiate the item in the scroll view
                 float spawnY = i * results_UIManager.itemHeight;
                 Vector2 pos = new Vector2(results_UIManager.fileSpawn.transform.position.x, results_UIManager.fileSpawn.transform.position.y + (-spawnY));

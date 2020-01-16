@@ -39,16 +39,18 @@ public class Tile : MonoBehaviour
     public void SimulationMode(){
         if (!hasFireExt){
             this.tileSprite = initialTileSprite;
-            SetTileTypeFromCurrentSprite();
         } else
             this.tileSprite = SharedInfo.si.fireExSprite;
         this.gameObject.GetComponent<SpriteRenderer>().sprite = this.tileSprite;
 
-        if (Simulation_Manager.simulationState == SimState.READYTOSTART)
-            SetSurroundingTiles();
+        if (Simulation_Manager.simulationState == SimState.READYTOSTART){
+            SetTileTypeFromCurrentSprite();
+            SetSurroundingTiles();            
+        }
     }
 
     public void EditMode(){
+        SetSurroundingTiles();
         this.gameObject.GetComponent<SpriteRenderer>().sprite = this.tileSprite;
         SetTileTypeFromCurrentSprite();
         initialTileSprite = this.tileSprite;
@@ -102,9 +104,11 @@ public class Tile : MonoBehaviour
                 this.surroundTiles.Add(northTile);
             }
 
-            southTile = Map.m.GetTileByID(this.tileID - Map.m._cols);
-            if ((northTile != null) && (!this.surroundTiles.Contains(southTile))){
-                this.surroundTiles.Add(southTile);
+            if (this.tileID - Map.m._cols > 0){
+                southTile = Map.m.GetTileByID(this.tileID - Map.m._cols);
+                if ((southTile != null) && (!this.surroundTiles.Contains(southTile))){
+                    this.surroundTiles.Add(southTile);
+                }
             }
         }
         catch (System.Exception)
@@ -118,15 +122,15 @@ public class Tile : MonoBehaviour
         {
             case "Clear_Tile":
                 this.tileType = tileType.Empty; 
-                SetCost(20);
+                SetCost(SharedInfo.emptyTileCost);
                 break;
             case "Exit":
                 this.tileType = tileType.Exit;
-                SetCost(300);
+                SetCost(SharedInfo.exitTileCost);
                 break;
             case "Fire_Extinguisher":
                 this.tileType = tileType.FireEx;
-                SetCost(100);
+                SetCost(SharedInfo.fireExtCost);
                 break;
             case "Fire":
                 this.tileType = tileType.Fire;
@@ -141,7 +145,7 @@ public class Tile : MonoBehaviour
                     this.tileType = tileType.OuterWall;
                 else
                     this.tileType = tileType.Wall;
-                SetCost(200);
+                SetCost(SharedInfo.wallCost);
                 break;
             default:
                 break;
@@ -184,5 +188,18 @@ public class Tile : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public bool isCorner(){
+        int nrOfEmptyTiles = 0;
+        foreach (Tile tile in this.surroundTiles)
+        {
+            if (tile.tileType == tileType.Empty)
+                nrOfEmptyTiles++;
+        }
+
+        if ((this.surroundTiles.Count <= 2) || (nrOfEmptyTiles <= 0))
+            return true;
+        return false;
     }
 }
