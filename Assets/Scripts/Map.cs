@@ -111,6 +111,7 @@ public class Map : MonoBehaviour {
         this._rows = loadedMap.Rows;
         this._cols = loadedMap.Cols;
         this.budget = loadedMap.Budget;
+        this.totalCost = loadedMap.TotalCost;
         this.listOfResults = loadedMap.ListOfResults;
         this.fileName = loadedMap.fileName;
 

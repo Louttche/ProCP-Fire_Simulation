@@ -20,6 +20,12 @@ public class SharedInfo : MonoBehaviour
 
     [HideInInspector]
     public bool spritesLoaded = false;
+    public Scene activeScene;
+
+    public static int wallCost = 120;
+    public static int emptyTileCost = 50;
+    public static int exitTileCost = 70;
+    public static int fireExtCost = 150;
 
     private void Awake() {
         if (si == null){
@@ -29,10 +35,14 @@ public class SharedInfo : MonoBehaviour
         LoadSprites();
     }
 
-    private void Update(){        
+    private void Update(){     
+        activeScene = SceneManager.GetActiveScene();
+        if (activeScene.name == "Main Scene")
+            this.TileSpriteSelected = null;
+
         if (currentMap != null)
             Debug.Log($"current map: {currentMap.fileName}");
-        
+
         //if (Map.m == null)
           //  currentMap = null;
     }

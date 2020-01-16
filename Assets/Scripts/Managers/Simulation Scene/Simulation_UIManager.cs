@@ -10,12 +10,12 @@ public class Simulation_UIManager : MonoBehaviour
     public static int nrOfPeoplePerTile = 1;
     public Slider nrOfPeople_Slider;
     public GameObject infoDisplay, statusDisplay, resultsPanel;
-    public TMPro.TextMeshProUGUI nrOfPeople_Text, nrOfEscapes_Text_Runtime, nrOfEscapes_Text, nrOfInjuries_Text, nrOfDeaths_Text;
+    public TMPro.TextMeshProUGUI nrOfPeople_Text, nrOfEscapes_Text_Runtime, nrOfEscapes_Text, nrOfInjuries_Text, nrOfDeaths_Text, totalCost_Text, budget_Text, fireExtCost_Text;
     public Button StartButton, StopButton, PauseButton, ResumeButton, LoadButton, CloseButton;
     
     private void Start() {
         nrOfPeople_Slider.minValue = nrOfPeoplePerTile;
-        SharedInfo.si.TileSpriteSelected = SharedInfo.si.fireExSprite;
+        fireExtCost_Text.text = SharedInfo.fireExtCost.ToString();
 
         nrOfPeople_Slider.interactable = false;
         StopButton.gameObject.SetActive(false);
@@ -35,8 +35,11 @@ public class Simulation_UIManager : MonoBehaviour
     private void Update() {
         //update the label to show the amount of people selected in the slider
         nrOfPeople_Text.text = nrOfPeople_Slider.value.ToString();
-        if ((Map.m.currentTiles.Count > 0) && (statusDisplay.activeSelf))
+        if ((Map.m.currentTiles.Count > 0) && (statusDisplay.activeSelf)){
             nrOfEscapes_Text_Runtime.text = Map.m.results.nrOfEscapes.ToString();
+        }
+
+        UpdateTotalCost();
 
         //Map the maximum amount of people allowed to spawn based on the amount of empty tiles on the map
         MapPeopleToEmptyTiles();
@@ -48,9 +51,27 @@ public class Simulation_UIManager : MonoBehaviour
             simulation_Manager.AddEmptyTiles();
         else{
                 //Allow 80% of the room to be filled up by people
-                nrOfPeople_Slider.maxValue = nrOfPeoplePerTile * Mathf.RoundToInt(simulation_Manager.currentEmptyTiles.Count * 50 / 100);
+                nrOfPeople_Slider.maxValue = nrOfPeoplePerTile * Mathf.Round(simulation_Manager.currentEmptyTiles.Count * 50 / 100);
                 //simulation_Manager.readyToStart = true;
                 RoundSliderValue();
+        }
+    }
+
+    public void UpdateTotalCost(){
+        if (Map.m.currentTiles.Count > 0){
+            Map.m.totalCost = 0;
+            budget_Text.text = Map.m.budget.ToString();
+
+            foreach (Tile tile in Map.m.currentTiles)
+            {
+                Map.m.totalCost += tile.cost;
+                totalCost_Text.text = Map.m.totalCost.ToString();
+            }
+
+            if (Map.m.budget < Map.m.totalCost){
+                totalCost_Text.color = Color.red;
+            } else
+                totalCost_Text.color = Color.black;
         }
     }
 
@@ -77,7 +98,7 @@ public class Simulation_UIManager : MonoBehaviour
                     statusDisplay.SetActive(false);
                     break;
                 case SimState.READYTOSTART:
-                    StartButton.gameObject.SetActive(!this.resultsPanel.activeSelf);
+                    StartButton.gameObject.SetActive(true);
                     PauseButton.gameObject.SetActive(false);
                     ResumeButton.gameObject.SetActive(false);
                     StopButton.gameObject.SetActive(false);
