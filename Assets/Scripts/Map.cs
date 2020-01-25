@@ -203,7 +203,7 @@ public class Map : MonoBehaviour {
             }
 
             if (tile.hasFireExt){
-                tile.GetComponent<BoxCollider2D>().size = originalTileSize * 2.5f;
+                tile.GetComponent<BoxCollider2D>().size = originalTileSize;
             }
         } else {
             tile.gameObject.AddComponent<BoxCollider2D>();

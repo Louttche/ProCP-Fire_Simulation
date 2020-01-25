@@ -43,11 +43,65 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
             //UpdateFireExtList();
         }
 
-        if (uiManager.resultsPanel.activeSelf == true){
-            SetState(SimState.IDLE);
+        Debug.Log($"{simulationState}");
+    }
+
+    public void StartSimulation(){ //Called when 'Start' button is pressed
+        SetState(SimState.RUNNING);
+        ScanObstacles();
+        Map.m.results = new Results();
+        
+        //Set fire
+        SetFire();
+        UpdateFireTileList();
+        UpdateExitList();
+        UpdateFireExtList();
+        SetPeople();
+    }
+
+    private void SetFire()
+    {
+        bool done = false;
+        while (!done){
+            int randomEmptyTile = UnityEngine.Random.Range(0, currentEmptyTiles.Count);
+            Tile currentRandomTile = currentEmptyTiles[randomEmptyTile];
+
+            if (currentRandomTile.tileType == tileType.Empty){
+                currentRandomTile.SetSpriteFromTileType(tileType.Fire);
+                currentRandomTile.SetTileTypeFromCurrentSprite();
+                Debug.Log(currentRandomTile.tileID.ToString());
+                done = true;
+            }
+        }
+    }
+
+    public void StopSimulation(){ //Called when 'Stop' button is pressed
+        SetState(SimState.READYTOSTART);
+        ClearFire();
+        ResetPeople();
+    }
+
+    private void ClearFire()
+    {
+        foreach (Tile t in Map.m.currentTiles)
+        {
+            if (t.tileType == tileType.Fire){
+                t.ResetInitialSprite();
+            }
         }
 
-        Debug.Log($"{simulationState}");
+        UpdateFireTileList();
+    }
+
+    public void CheckIfSimulationIsDone(){
+        GameObject[] people = GameObject.FindGameObjectsWithTag("Person");
+        if (people.Length == 0){
+            StopSimulation();
+            uiManager.ShowResults();
+        } else {
+            UpdateFireTileList();
+            UpdateFireExtList();
+        }
     }
 
     public void Load(){
@@ -77,6 +131,7 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
     public void SetState(SimState state){
         simulationState = state;
     }
+    
     public void ScanObstacles(){
         Debug.Log("Scanning obstacles...");
         pathFinder.GetComponent<AstarPath>().Scan();
@@ -105,44 +160,13 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         Map.m.UpdateCurrentTilesList();
     }
     
-    public void StartSimulation(){ //Called when 'Start' button is pressed
-        SetState(SimState.RUNNING);
-        ScanObstacles();
-        Map.m.results = new Results();
-        
-        //Set fire
-        UpdateFireTileList();
-        UpdateExitList();
-        UpdateFireExtList();
-        SetPeople();
-    }
-
-    private void UpdateFireExtList()
-    {
-        listofFireExtTiles.Clear();
-        foreach (Tile tile in Map.m.currentTiles)
-        {
-            if (tile.hasFireExt){
-                listofFireExtTiles.Add(tile);
-            }
-        }
-    }
-
-    public void StopSimulation(){ //Called when 'Stop' button is pressed
-        if (Map.m.currentTiles.Count > 0)
-            SetState(SimState.READYTOSTART);
-        else
-            SetState(SimState.IDLE);
-
-        ResetPeople();
-    }
-
-    public void CheckIfSimulationIsDone(){
+    public void ResetPeople(){
         GameObject[] people = GameObject.FindGameObjectsWithTag("Person");
-        if (people.Length == 0){
-            StopSimulation();
-            uiManager.ShowResults();
+        foreach (var person in people)
+        {
+            Destroy(person);
         }
+        Map.m.UpdateCurrentTilesList();
     }
 
     public void SaveCurrentResults(){ //Called by the 'save results' button
@@ -163,6 +187,19 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         {
             Debug.Log("Could not save!");
             throw;
+        } finally{
+            SetState(SimState.READYTOSTART);
+        }
+    }
+
+    private void UpdateFireExtList()
+    {
+        listofFireExtTiles.Clear();
+        foreach (Tile tile in Map.m.currentTiles)
+        {
+            if (tile.hasFireExt){
+                listofFireExtTiles.Add(tile);
+            }
         }
     }
 
@@ -188,32 +225,30 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         }
     }
 
-    public void ResetPeople(){
-        GameObject[] people = GameObject.FindGameObjectsWithTag("Person");
-        foreach (var person in people)
-        {
-            Destroy(person);
-        }
-        Map.m.UpdateCurrentTilesList();
-    }
-
     private void SetFireExt(){
-        GetMousePosition gmp = new GetMousePosition();
-        GameObject currentTileObj = gmp.GetTargettedGO(Input.mousePosition);
-        Tile currentTile = currentTileObj.GetComponent<Tile>();
+        try
+        {
+            GetMousePosition gmp = new GetMousePosition();
+            GameObject currentTileObj = gmp.GetTargettedGO(Input.mousePosition);
+            Tile currentTile = currentTileObj.GetComponent<Tile>();
 
-        //Add/Remove fire extinguishers from the map, while keeping the original sprite of the tile through its type (type remains unchanged)
-        if ((currentTileObj != null) && (currentTile != null)){
-            if (currentTileObj.tag == "tile"){
-                if ((!currentTile.hasFireExt) && ((currentTile.tileType == tileType.Wall) || (currentTile.tileType == tileType.OuterWall) && (currentTile.isCorner() == false))){
-                    currentTileObj.GetComponent<Tile>().hasFireExt = true;
-                } else {
-                    currentTileObj.GetComponent<Tile>().SetSpriteFromTileType(currentTileObj.GetComponent<Tile>().tileType);
-                    currentTileObj.GetComponent<Tile>().hasFireExt = false;
+            //Add/Remove fire extinguishers from the map, while keeping the original sprite of the tile through its type (type remains unchanged)
+            if ((currentTileObj != null) && (currentTile != null)){
+                if (currentTileObj.tag == "tile"){
+                    if ((!currentTile.hasFireExt) && ((currentTile.tileType == tileType.Wall) || (currentTile.tileType == tileType.OuterWall) && (currentTile.isCorner() == false))){
+                        currentTileObj.GetComponent<Tile>().hasFireExt = true;
+                    } else {
+                        currentTileObj.GetComponent<Tile>().SetSpriteFromTileType(currentTileObj.GetComponent<Tile>().tileType);
+                        currentTileObj.GetComponent<Tile>().hasFireExt = false;
+                    }
                 }
             }
+            Map.m.UpdateCurrentTilesList();
+        }   
+        catch (System.Exception)
+        {
+            return;
         }
-        Map.m.UpdateCurrentTilesList();
     }
 
     public void AddEmptyTiles(){
@@ -230,7 +265,6 @@ public class Simulation_Manager : MonoBehaviour, ISceneChange
         if (currentEmptyTiles != null)
             currentEmptyTiles.Clear();
     }
-
     public void GoToEditorScene()
     {
         SceneManager.LoadScene("Editor Scene", LoadSceneMode.Single);

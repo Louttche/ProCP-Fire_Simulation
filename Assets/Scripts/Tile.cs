@@ -37,16 +37,19 @@ public class Tile : MonoBehaviour
     }
 
     public void SimulationMode(){
-        if (!hasFireExt){
-            this.tileSprite = initialTileSprite;
-        } else
+        if ((!hasFireExt) && (this.tileType != tileType.Fire)){
+            this.tileSprite = initialTileSprite;    
+        } else if (hasFireExt)
             this.tileSprite = SharedInfo.si.fireExSprite;
-        this.gameObject.GetComponent<SpriteRenderer>().sprite = this.tileSprite;
+        else if (this.tileType == tileType.Fire)
+            this.tileSprite = SharedInfo.si.fireSprite;
 
         if (Simulation_Manager.simulationState == SimState.READYTOSTART){
-            SetTileTypeFromCurrentSprite();
             SetSurroundingTiles();            
         }
+
+        this.gameObject.GetComponent<SpriteRenderer>().sprite = this.tileSprite;
+        SetTileTypeFromCurrentSprite();
     }
 
     public void EditMode(){
@@ -62,6 +65,8 @@ public class Tile : MonoBehaviour
                 other.transform.SetParent(this.transform);
                 SetSpriteFromTileType(tileType.People);
             } else if (this.tileType == tileType.Exit){
+                if (other.GetComponent<Person>().currentHealth < other.GetComponent<Person>().maxHealth)
+                    Map.m.results.nrOfInjuries++;
                 Destroy(other.gameObject);
                 Map.m.results.nrOfEscapes++;
             }
@@ -190,6 +195,10 @@ public class Tile : MonoBehaviour
         }
     }
 
+    public void ResetInitialSprite(){
+        this.tileSprite = this.initialTileSprite;
+        SetTileTypeFromCurrentSprite();
+    }
     public bool isCorner(){
         int nrOfEmptyTiles = 0;
         foreach (Tile tile in this.surroundTiles)

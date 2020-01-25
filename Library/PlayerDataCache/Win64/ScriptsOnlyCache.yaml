@@ -190,15 +190,15 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10968}
     - Class: 114
-      Script: {instanceID: 91350}
+      Script: {instanceID: 69676}
     - Class: 114
-      Script: {instanceID: 91354}
+      Script: {instanceID: 69680}
     - Class: 114
-      Script: {instanceID: 91424}
+      Script: {instanceID: 69750}
     - Class: 114
-      Script: {instanceID: 91514}
+      Script: {instanceID: 69840}
     - Class: 114
-      Script: {instanceID: 91630}
+      Script: {instanceID: 69956}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1502,5 +1502,5 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Editor Scene.unity
   - Assets/Scenes/Result Scene.unity
   - Assets/Scenes/Simulation Scene.unity
-  playerPath: C:/Users/31627/Documents/Github/Floor Plan Editor/Demo 6.0/Fire Escape
+  playerPath: C:/Users/31627/Documents/Github/Floor Plan Editor/Demo 7.0/Fire Escape
     Simulation.exe

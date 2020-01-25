@@ -27,7 +27,6 @@ public class Edit_Manager : MonoBehaviour, ISceneChange
         catch (System.Exception)
         {
             Debug.Log("Could not save!");
-            throw;
         }        
     }
 
@@ -42,13 +41,11 @@ public class Edit_Manager : MonoBehaviour, ISceneChange
                 if (so != null){
                     Map.m.LoadMap(so, true);
                 }
-            } else
-                Debug.Log("Could not load!");
+            }
         }
         catch (System.Exception)
         {
             Debug.Log("Could not load!");
-            throw;
         }
     }
 

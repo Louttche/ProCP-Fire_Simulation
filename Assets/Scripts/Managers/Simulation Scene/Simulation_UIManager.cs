@@ -147,6 +147,7 @@ public class Simulation_UIManager : MonoBehaviour
 
     public void ShowResults()
     {
+        simulation_Manager.SetState(SimState.IDLE);
         resultsPanel.SetActive(true);
         nrOfEscapes_Text.text = Map.m.results.nrOfEscapes.ToString();
         nrOfDeaths_Text.text = Map.m.results.nrOfDeaths.ToString();

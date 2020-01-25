@@ -12,7 +12,7 @@ public class Person : MonoBehaviour
     }
 
     public bool hasFireExt;
-    public int currentHealth, maxHealth = 10, fireExtCapacity;
+    public int currentHealth, maxHealth, fireExtCapacity;
     public Action action;
     public Tile onTile;
 
@@ -30,23 +30,28 @@ public class Person : MonoBehaviour
             switch (action)
             {
                 case Action.Evacuate:
+                    this.GetComponentInChildren<SpriteRenderer>().color = Color.blue;
                     //Run to nearest exit
                     EvacuateToNearestExit();
-                    this.GetComponent<SpriteRenderer>().color = Color.blue;
                     break;
                 case Action.Extinguish:
-                    if (!hasFireExt){
+                    this.GetComponentInChildren<SpriteRenderer>().color = Color.yellow + Color.red;
+                    if (Simulation_Manager.listofFireExtTiles.Count > 0){
+                        if (!this.hasFireExt){
                         //Go to the nearest fire extinguisher
-                        this.GetComponent<AIDestinationSetter>().target = GetNearestFireExt().transform;
-                    } else{
-                        //Extinguish nearest flames
-                        
+                        this.GetComponent<AIDestinationSetter>().target = GetNearestEmptyTileTo(GetNearestFireExt()).transform;
+                        this.hasFireExt = PickUpExtinguisher();
+                        } else{
+                            //Extinguish nearest flames
+                            ExtinguishFire();
+                        }
+                    } else {
+                        this.action = Action.Evacuate;
                     }
-                    this.GetComponent<SpriteRenderer>().color = Color.yellow + Color.red;
                     break;
                 case Action.Panic:
                     //Run around in circles
-                    this.GetComponent<SpriteRenderer>().color = Color.red;
+                    this.GetComponentInChildren<SpriteRenderer>().color = Color.red;
                     break;
                 default:
                     break;
@@ -66,6 +71,17 @@ public class Person : MonoBehaviour
         }
     }
 
+    private bool PickUpExtinguisher(){
+        foreach (Tile t in onTile.surroundTiles)
+        {
+            if (t.hasFireExt == true){
+                t.hasFireExt = false;
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public void EvacuateToNearestExit(){
         int nrOfPeopleExtinguishing = 0;
         foreach (Person p in Simulation_Manager.listofPeople)
@@ -76,7 +92,7 @@ public class Person : MonoBehaviour
 
         //If there are enough people looking to extinguish, then evacuate, otherwise extinguish
         if ((nrOfPeopleExtinguishing >= Simulation_Manager.listofFireExtTiles.Count) && (GetNearestExit().transform != null))
-                this.GetComponent<AIDestinationSetter>().target = GetNearestExit().transform;
+            this.GetComponent<AIDestinationSetter>().target = GetNearestExit().transform;
         else{
             this.action = Action.Extinguish;
         }
@@ -155,7 +171,7 @@ public class Person : MonoBehaviour
         Tile nearestFireExt = null;
 
         if (onTile != null){
-            foreach (Tile fireExt in Simulation_Manager.listOfFireTiles)
+            foreach (Tile fireExt in Simulation_Manager.listofFireExtTiles)
             {
                 float distance_x = onTile.tilePosition.x - fireExt.tilePosition.x;
                 float distance_y = onTile.tilePosition.y - fireExt.tilePosition.y;
@@ -170,6 +186,16 @@ public class Person : MonoBehaviour
         return nearestFireExt;
     }
 
+    private Tile GetNearestEmptyTileTo(Tile tile){
+        foreach (Tile t in tile.surroundTiles)
+        {
+            if (t.tileType == tileType.Empty){
+                return t;
+            }
+        }
+
+        return null;
+    }
     private void OnTriggerEnter2D(Collider2D other) {
         try
         {
@@ -194,14 +220,14 @@ public class Person : MonoBehaviour
             if ((tile != null) && (tile.tileType == tileType.Fire)){
                 bool isDead = this.GetDamaged(Simulation_Manager.fireDamage);
                 if (isDead){
-                    Destroy(this);
+                    Destroy(this.gameObject);
                     Map.m.results.nrOfDeaths++;
                 }
                 
                 framesInFire++;
-                if (framesInFire >= 20)
+                if (framesInFire >= 10)
                     this.action = Action.Panic;
             } 
-        }   
+        }
     }
 }
